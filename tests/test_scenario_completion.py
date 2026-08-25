@@ -57,6 +57,8 @@ class TestCompletion(unittest.TestCase):
             OpenRouterModel = pool.get('ai.model.openrouter')
             AIModel = pool.get('ai.model')
             Configuration = pool.get('ai.configuration')
+            ActionWindow = pool.get('ir.action.act_window')
+            ModelAccess = pool.get('ir.model.access')
             openrouter_model, = OpenRouterModel.create([{
                         'openrouter_id': 'example/model',
                         'name': 'Example model',
@@ -70,6 +72,14 @@ class TestCompletion(unittest.TestCase):
                         }])
             Transaction()._locked_tables.add(Configuration._table)
             Configuration.create([{'assistant_model': ai_model.id}])
+            action, = ActionWindow.create([{
+                        'name': 'Example Model',
+                        'res_model': OpenRouterModel.__name__,
+                        }])
+            access, = ModelAccess.create([{
+                        'model': OpenRouterModel.__name__,
+                        'perm_read': True,
+                        }])
 
             table_renames = [
                 ('ai_model_openrouter', 'nantic_ai_model_openrouter'),
@@ -82,6 +92,7 @@ class TestCompletion(unittest.TestCase):
             cursor = Transaction().connection.cursor()
             ir_model = Table('ir_model')
             ir_model_field = Table('ir_model_field')
+            ir_model_access = Table('ir_model_access')
             translations = Table('ir_translation')
             model_names = [
                 ('ai.model.openrouter', 'nantic.ai.model.openrouter'),
@@ -100,6 +111,13 @@ class TestCompletion(unittest.TestCase):
                 cursor.execute(*ir_model_field.update(
                         [ir_model_field.relation], [old_name],
                         where=ir_model_field.relation == new_name))
+                cursor.execute(*ir_model_access.update(
+                        [ir_model_access.model], [old_name],
+                        where=ir_model_access.model == new_name))
+                action_table = ActionWindow.__table__()
+                cursor.execute(*action_table.update(
+                        [action_table.res_model], [old_name],
+                        where=action_table.res_model == new_name))
                 cursor.execute(*translations.select(
                         translations.id, translations.name,
                         where=translations.name.like(new_name + '%')))
@@ -117,6 +135,12 @@ class TestCompletion(unittest.TestCase):
             self.assertEqual(AIModel(ai_model.id).name, 'Example model')
             self.assertEqual(
                 Configuration(1).assistant_model.id, ai_model.id)
+            self.assertFalse(ActionWindow.search([
+                        ('id', '=', action.id),
+                        ]))
+            self.assertFalse(ModelAccess.search([
+                        ('id', '=', access.id),
+                        ]))
             self.assertFalse(pool.get('ir.model').search([
                         ('name', 'like', 'nantic.ai.%'),
                         ]))

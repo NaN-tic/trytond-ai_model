@@ -10,7 +10,7 @@ from trytond.exceptions import UserError
 from trytond.i18n import gettext
 from trytond.model import (
     DeactivableMixin, ModelSingleton, ModelSQL, ModelView, Unique, fields)
-from trytond.pool import PoolMeta
+from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Bool, Eval
 from trytond.transaction import Transaction
 
@@ -57,6 +57,11 @@ MOVED_MODEL_DATA = {
     'msg_openrouter_model_id_unique',
     'msg_openrouter_model_sync_error',
     }
+OLD_MODELS = {
+    'nantic.ai.model.openrouter',
+    'nantic.ai.model',
+    'nantic.ai.configuration',
+    }
 if OPENROUTER_KEY:
     OPENROUTER_CLIENT = OpenAI(
         base_url='https://openrouter.ai/api/v1',
@@ -84,6 +89,8 @@ def migrate_models():
         ('nantic.ai.model', 'ai.model'),
         ('nantic.ai.configuration', 'ai.configuration'),
         ]
+
+    remove_old_model_records()
 
     if backend.TableHandler.table_exist('ir_model'):
         ir_model = Table('ir_model')
@@ -117,6 +124,81 @@ def migrate_models():
                         [translation.name], [
                             new_name + name[len(old_name):]],
                         where=translation.id == translation_id))
+
+
+def remove_old_model_records():
+    tables = {
+        'ir_action_act_window',
+        'ir_action_act_window_view',
+        'ir_model_access',
+        'ir_model_field',
+        'ir_model_data',
+        'ir_ui_view',
+        }
+    if not all(backend.TableHandler.table_exist(table) for table in tables):
+        return
+
+    cursor = Transaction().connection.cursor()
+    action = Table('ir_action_act_window')
+    cursor.execute(*action.select(
+            action.id,
+            where=(action.res_model.in_(tuple(OLD_MODELS)))
+            | (action.context_model.in_(tuple(OLD_MODELS)))))
+    action_ids = [action_id for action_id, in cursor]
+
+    action_view = Table('ir_action_act_window_view')
+    action_view_ids = []
+    if action_ids:
+        cursor.execute(*action_view.select(
+                action_view.id,
+                where=action_view.act_window.in_(action_ids)))
+        action_view_ids = [action_view_id for action_view_id, in cursor]
+
+    access = Table('ir_model_access')
+    cursor.execute(*access.select(
+            access.id, where=access.model.in_(tuple(OLD_MODELS))))
+    access_ids = [access_id for access_id, in cursor]
+
+    view = Table('ir_ui_view')
+    cursor.execute(*view.select(
+            view.id, where=view.model.in_(tuple(OLD_MODELS))))
+    view_ids = [view_id for view_id, in cursor]
+
+    model_data = Table('ir_model_data')
+    where = None
+    if action_ids:
+        where = ((model_data.model == 'ir.action.act_window')
+            & model_data.db_id.in_(action_ids))
+    if action_view_ids:
+        condition = ((model_data.model == 'ir.action.act_window.view')
+            & model_data.db_id.in_(action_view_ids))
+        where = condition if where is None else where | condition
+    if access_ids:
+        condition = ((model_data.model == 'ir.model.access')
+            & model_data.db_id.in_(access_ids))
+        where = condition if where is None else where | condition
+    if view_ids:
+        condition = ((model_data.model == 'ir.ui.view')
+            & model_data.db_id.in_(view_ids))
+        where = condition if where is None else where | condition
+    if where is not None:
+        cursor.execute(*model_data.delete(where=where))
+    pool = Pool()
+    ActionWindow = pool.get('ir.action.act_window')
+    if action_ids:
+        ActionWindow.delete(ActionWindow.browse(action_ids))
+    if access_ids:
+        cursor.execute(*access.delete(where=access.id.in_(access_ids)))
+    if view_ids:
+        cursor.execute(*view.delete(where=view.id.in_(view_ids)))
+    model_field = Table('ir_model_field')
+    cursor.execute(*model_field.delete(
+            where=(model_field.model.in_(tuple(OLD_MODELS)))
+            | (model_field.relation.in_(tuple(OLD_MODELS)))))
+    model_data_model = pool.get('ir.model.data')
+    model_data_model._get_id_cache.clear()
+    model_data_model._has_model_cache.clear()
+    pool.get('ir.model.access')._get_access_cache.clear()
 
 
 def migrate_model_fields(Model):
