@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<form col="6">
+    <label name="name"/>
+    <field name="name"/>
+    <label name="openrouter_id"/>
+    <field name="openrouter_id"/>
+    <label name="active"/>
+    <field name="active"/>
+    <label name="created"/>
+    <field name="created"/>
+    <label name="context_length"/>
+    <field name="context_length"/>
+    <separator name="description" colspan="6"/>
+    <field name="description" colspan="6"/>
+    <notebook colspan="6">
+        <page string="Pricing" id="pricing" col="6">
+            <label string="Token prices are shown per million tokens."
+                colspan="6" id="million-tokens"/>
+            <label name="prompt_price"/>
+            <field name="prompt_price"/>
+            <label name="completion_price"/>
+            <field name="completion_price"/>
+            <label name="request_price"/>
+            <field name="request_price"/>
+            <label name="web_search_price"/>
+            <field name="web_search_price"/>
+            <label name="image_price"/>
+            <field name="image_price"/>
+            <label name="internal_reasoning_price"/>
+            <field name="internal_reasoning_price"/>
+            <label name="input_cache_read_price"/>
+            <field name="input_cache_read_price"/>
+            <label name="input_cache_write_price"/>
+            <field name="input_cache_write_price"/>
+        </page>
+        <page string="Architecture" id="architecture" col="6">
+            <label name="modality"/>
+            <field name="modality"/>
+            <label name="input_modalities"/>
+            <field name="input_modalities"/>
+            <label name="output_modalities"/>
+            <field name="output_modalities"/>
+            <label name="tokenizer"/>
+            <field name="tokenizer"/>
+            <label name="instruct_type"/>
+            <field name="instruct_type"/>
+            <separator name="supported_parameters" colspan="6"/>
+            <field name="supported_parameters" colspan="6"/>
+        </page>
+        <page string="Top Provider" id="top_provider" col="6">
+            <label name="top_provider_context_length"/>
+            <field name="top_provider_context_length"/>
+            <label name="top_provider_max_completion_tokens"/>
+            <field name="top_provider_max_completion_tokens"/>
+            <label name="top_provider_is_moderated"/>
+            <field name="top_provider_is_moderated"/>
+            <separator name="per_request_limits" colspan="6"/>
+            <field name="per_request_limits" colspan="6"/>
+        </page>
+        <page string="Raw Data" id="raw_data">
+            <field name="raw_data" colspan="6"/>
+        </page>
+    </notebook>
+</form>

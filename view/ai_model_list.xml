@@ -1,0 +1,9 @@
+<tree>
+    <field name="name" expand="1"/>
+    <field name="type"/>
+    <field name="provider"/>
+    <field name="openrouter_model" optional="1"/>
+    <field name="model_name"/>
+    <field name="reasoning"/>
+    <field name="allow_web_search"/>
+</tree>

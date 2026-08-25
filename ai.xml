@@ -1,0 +1,133 @@
+<tryton>
+    <data>
+        <menuitem name="AI" parent="ir.menu_administration"
+            sequence="10" id="menu_ai"/>
+
+        <record model="ir.ui.view" id="view_chat_instruction_form">
+            <field name="model">ai.configuration</field>
+            <field name="type">form</field>
+            <field name="name">ai_configuration_form</field>
+        </record>
+        <record model="ir.action.act_window" id="act_chat_instruction">
+            <field name="name">Configuration</field>
+            <field name="res_model">ai.configuration</field>
+        </record>
+        <record model="ir.action.act_window.view"
+                id="act_chat_instruction_form">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="view_chat_instruction_form"/>
+            <field name="act_window" ref="act_chat_instruction"/>
+        </record>
+        <menuitem id="menu_instruction" parent="menu_ai"
+            sequence="10" icon="tryton-list" action="act_chat_instruction"/>
+        <record model="ir.model.access" id="access_chat_instruction">
+            <field name="model">ai.configuration</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access"
+                id="access_chat_instruction_account_admin">
+            <field name="model">ai.configuration</field>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+
+        <record model="ir.ui.view" id="view_ai_model_form">
+            <field name="model">ai.model</field>
+            <field name="type">form</field>
+            <field name="name">ai_model_form</field>
+        </record>
+        <record model="ir.ui.view" id="view_ai_model_tree">
+            <field name="model">ai.model</field>
+            <field name="type">tree</field>
+            <field name="name">ai_model_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_ai_model">
+            <field name="name">Models</field>
+            <field name="res_model">ai.model</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_ai_model_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="view_ai_model_form"/>
+            <field name="act_window" ref="act_ai_model"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_ai_model_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="view_ai_model_tree"/>
+            <field name="act_window" ref="act_ai_model"/>
+        </record>
+        <menuitem id="menu_ai_model" parent="menu_ai" sequence="20"
+            icon="tryton-list" action="act_ai_model"/>
+        <record model="ir.model.access" id="access_ai_model">
+            <field name="model">ai.model</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_ai_model_admin">
+            <field name="model">ai.model</field>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+
+        <record model="ir.ui.view" id="view_openrouter_model_form">
+            <field name="model">ai.model.openrouter</field>
+            <field name="type">form</field>
+            <field name="name">openrouter_model_form</field>
+        </record>
+        <record model="ir.ui.view" id="view_openrouter_model_tree">
+            <field name="model">ai.model.openrouter</field>
+            <field name="type">tree</field>
+            <field name="name">openrouter_model_list</field>
+        </record>
+        <record model="ir.cron" id="cron_sync_openrouter_models">
+            <field name="active" eval="True"/>
+            <field name="interval_number" eval="1"/>
+            <field name="interval_type">weeks</field>
+            <field name="method">ai.model.openrouter|cron_sync</field>
+        </record>
+        <record model="ir.action.act_window" id="act_openrouter_model">
+            <field name="name">OpenRouter Models</field>
+            <field name="res_model">ai.model.openrouter</field>
+        </record>
+        <record model="ir.action.act_window.view"
+                id="act_openrouter_model_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="view_openrouter_model_form"/>
+            <field name="act_window" ref="act_openrouter_model"/>
+        </record>
+        <record model="ir.action.act_window.view"
+                id="act_openrouter_model_tree">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="view_openrouter_model_tree"/>
+            <field name="act_window" ref="act_openrouter_model"/>
+        </record>
+        <menuitem id="menu_openrouter_model" parent="menu_ai_model"
+            sequence="10" icon="tryton-list"
+            action="act_openrouter_model"/>
+        <record model="ir.model.access" id="access_openrouter_model">
+            <field name="model">ai.model.openrouter</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_openrouter_model_admin">
+            <field name="model">ai.model.openrouter</field>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+    </data>
+</tryton>

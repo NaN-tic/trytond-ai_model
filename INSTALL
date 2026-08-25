@@ -1,0 +1,5 @@
+Installing
+==========
+
+Install this module with its Python dependencies and activate
+``ai_model`` in the Tryton database.

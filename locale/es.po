@@ -1,0 +1,278 @@
+#
+# SPDX-FileCopyrightText: 2026 albert
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Last-Translator: albert\n"
+"PO-Revision-Date: 2026-07-06 12:23+0200\n"
+"Project-Id-Version: \n"
+"Language-Team: Spanish <>\n"
+"Language: es_ES\n"
+"Content-Transfer-Encoding: 8bit\n"
+"MIME-Version: 1.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.0\n"
+
+msgctxt "field:ai.configuration,assistant_model:"
+msgid "Assistant Model"
+msgstr "Modelo del asistente"
+
+msgctxt "field:ai.configuration,default_embedding_model:"
+msgid "Default Embedding"
+msgstr "Embedding predeterminado"
+
+msgctxt "field:ai.model,allow_web_search:"
+msgid "Allow Web Search"
+msgstr "Permitir búsqueda web"
+
+msgctxt "field:ai.model,model_name:"
+msgid "Model Name"
+msgstr "Nombre del modelo"
+
+msgctxt "field:ai.model,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:ai.model,openrouter_model:"
+msgid "OpenRouter Model"
+msgstr "Modelo OpenRouter"
+
+msgctxt "field:ai.model,provider:"
+msgid "Provider"
+msgstr "Proveedor"
+
+msgctxt "field:ai.model,reasoning:"
+msgid "Reasoning"
+msgstr "Razonamiento"
+
+msgctxt "field:ai.model,supports_reasoning:"
+msgid "Supports Reasoning"
+msgstr "Admite razonamiento"
+
+msgctxt "field:ai.model,supports_web_search:"
+msgid "Supports Web Search"
+msgstr "Admite búsqueda web"
+
+msgctxt "field:ai.model,type:"
+msgid "Type"
+msgstr "Tipo"
+
+msgctxt "field:ai.model.openrouter,completion_price:"
+msgid "Completion Price"
+msgstr "Precio de finalización"
+
+msgctxt "field:ai.model.openrouter,context_length:"
+msgid "Context Length"
+msgstr "Longitud del contexto"
+
+msgctxt "field:ai.model.openrouter,created:"
+msgid "Created"
+msgstr "Creado"
+
+msgctxt "field:ai.model.openrouter,description:"
+msgid "Description"
+msgstr "Descripción"
+
+msgctxt "field:ai.model.openrouter,image_price:"
+msgid "Image Price"
+msgstr "Precio de la imagen"
+
+msgctxt "field:ai.model.openrouter,input_cache_read_price:"
+msgid "Input Cache Read Price"
+msgstr "Precio de lectura de la caché de entrada"
+
+msgctxt "field:ai.model.openrouter,input_cache_write_price:"
+msgid "Input Cache Write Price"
+msgstr "Precio de escritura de la caché de entrada"
+
+msgctxt "field:ai.model.openrouter,input_modalities:"
+msgid "Input Modalities"
+msgstr "Modalidades de entrada"
+
+msgctxt "field:ai.model.openrouter,instruct_type:"
+msgid "Instruct Type"
+msgstr "Tipo de instrucción"
+
+msgctxt "field:ai.model.openrouter,internal_reasoning_price:"
+msgid "Internal Reasoning Price"
+msgstr "Precio de razonamiento interno"
+
+msgctxt "field:ai.model.openrouter,modality:"
+msgid "Modality"
+msgstr "Modalidad"
+
+msgctxt "field:ai.model.openrouter,name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:ai.model.openrouter,openrouter_id:"
+msgid "OpenRouter ID"
+msgstr "ID de OpenRouter"
+
+msgctxt "field:ai.model.openrouter,output_modalities:"
+msgid "Output Modalities"
+msgstr "Modalidades de salida"
+
+msgctxt "field:ai.model.openrouter,per_request_limits:"
+msgid "Per Request Limits"
+msgstr "Límites por solicitud"
+
+msgctxt "field:ai.model.openrouter,prompt_price:"
+msgid "Prompt Price"
+msgstr "Precio del prompt"
+
+msgctxt "field:ai.model.openrouter,raw_data:"
+msgid "Raw Data"
+msgstr "Datos sin procesar"
+
+msgctxt "field:ai.model.openrouter,request_price:"
+msgid "Request Price"
+msgstr "Precio por solicitud"
+
+msgctxt "field:ai.model.openrouter,supported_parameters:"
+msgid "Supported Parameters"
+msgstr "Parámetros admitidos"
+
+msgctxt "field:ai.model.openrouter,tokenizer:"
+msgid "Tokenizer"
+msgstr "Tokenizador"
+
+msgctxt "field:ai.model.openrouter,top_provider_context_length:"
+msgid "Top Provider Context Length"
+msgstr "Longitud del contexto del proveedor principal"
+
+msgctxt "field:ai.model.openrouter,top_provider_is_moderated:"
+msgid "Top Provider Is Moderated"
+msgstr "El proveedor principal está moderado"
+
+msgctxt "field:ai.model.openrouter,top_provider_max_completion_tokens:"
+msgid "Top Provider Max Completion Tokens"
+msgstr "Tokens de finalización máximos del proveedor principal"
+
+msgctxt "field:ai.model.openrouter,web_search_price:"
+msgid "Web Search Price"
+msgstr "Precio de búsqueda web"
+
+msgctxt "model:ir.action,name:act_ai_model"
+msgid "Models"
+msgstr "Modelos"
+
+msgctxt "model:ir.action,name:act_chat_instruction"
+msgid "Configuration"
+msgstr "Configuración"
+
+msgctxt "model:ir.action,name:act_openrouter_model"
+msgid "OpenRouter Models"
+msgstr "Modelos de OpenRouter"
+
+msgctxt "model:ir.message,text:msg_assistant_authentication_failed"
+msgid ""
+"Authentication with the AI service failed. Please check the API key "
+"configuration."
+msgstr ""
+"La autenticación con el servicio de IA ha fallado. Revise la configuración "
+"de la clave de API."
+
+msgctxt "model:ir.message,text:msg_assistant_no_response"
+msgid "AI server returned no response"
+msgstr "El servidor de IA no devolvió ninguna respuesta."
+
+msgctxt "model:ir.message,text:msg_assistant_unreachable"
+msgid ""
+"The AI service is currently experiencing issues. Please try again in a few "
+"minutes."
+msgstr ""
+"El servicio de IA está teniendo problemas. Inténtelo de nuevo en unos "
+"minutos."
+
+msgctxt "model:ir.message,text:msg_openrouter_model_id_unique"
+msgid "The OpenRouter model identifier must be unique."
+msgstr "El identificador del modelo de OpenRouter debe ser único."
+
+msgctxt "model:ir.message,text:msg_openrouter_model_sync_error"
+msgid "There was an error syncing OpenRouter models: %(error)s"
+msgstr "Se ha producido un error al sincronizar los modelos de OpenRouter: %(error)s"
+
+msgctxt "model:ir.ui.menu,name:menu_ai_model"
+msgid "Models"
+msgstr "Modelos"
+
+msgctxt "model:ir.ui.menu,name:menu_instruction"
+msgid "Configuration"
+msgstr "Configuración"
+
+msgctxt "model:ir.ui.menu,name:menu_openrouter_model"
+msgid "OpenRouter Models"
+msgstr "Modelos de OpenRouter"
+
+msgctxt "model:ai.configuration,string:"
+msgid "Ai Configuration"
+msgstr "Configuración de IA"
+
+msgctxt "model:ai.model,string:"
+msgid "Ai Model"
+msgstr "Modelo de IA"
+
+msgctxt "model:ai.model.openrouter,string:"
+msgid "Ai Model Openrouter"
+msgstr "Modelo OpenRouter de IA"
+
+msgctxt "selection:ir.cron,method:"
+msgid "Sync OpenRouter Models"
+msgstr "Sincronizar modelos de OpenRouter"
+
+msgctxt "selection:ai.model,provider:"
+msgid "OpenAI"
+msgstr "OpenAI"
+
+msgctxt "selection:ai.model,provider:"
+msgid "OpenRouter"
+msgstr "OpenRouter"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "High"
+msgstr "Alto"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "Low"
+msgstr "Bajo"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "Medium"
+msgstr "Medio"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "None"
+msgstr "Ninguno"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "XHigh"
+msgstr "Muy alto"
+
+msgctxt "selection:ai.model,type:"
+msgid "Embedding"
+msgstr "Embedding"
+
+msgctxt "selection:ai.model,type:"
+msgid "LLM"
+msgstr "LLM"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Architecture"
+msgstr "Arquitectura"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Pricing"
+msgstr "Precios"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Token prices are shown per million tokens."
+msgstr "Los precios de los tokens se muestran por millón de tokens."
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Raw Data"
+msgstr "Datos sin procesar"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Top Provider"
+msgstr "Proveedor principal"

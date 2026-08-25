@@ -1,0 +1,267 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:ai.configuration,assistant_model:"
+msgid "Assistant Model"
+msgstr "Model de l'assistent"
+
+msgctxt "field:ai.configuration,default_embedding_model:"
+msgid "Default Embedding"
+msgstr "Embedding predeterminat"
+
+msgctxt "field:ai.model,allow_web_search:"
+msgid "Allow Web Search"
+msgstr "Permet la cerca web"
+
+msgctxt "field:ai.model,model_name:"
+msgid "Model Name"
+msgstr "Nom del model"
+
+msgctxt "field:ai.model,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ai.model,openrouter_model:"
+msgid "OpenRouter Model"
+msgstr "Model OpenRouter"
+
+msgctxt "field:ai.model,provider:"
+msgid "Provider"
+msgstr "Proveïdor"
+
+msgctxt "field:ai.model,reasoning:"
+msgid "Reasoning"
+msgstr "Raonament"
+
+msgctxt "field:ai.model,supports_reasoning:"
+msgid "Supports Reasoning"
+msgstr "Suporta el raonament"
+
+msgctxt "field:ai.model,supports_web_search:"
+msgid "Supports Web Search"
+msgstr "Admet la cerca web"
+
+msgctxt "field:ai.model,type:"
+msgid "Type"
+msgstr "Tipus"
+
+msgctxt "field:ai.model.openrouter,completion_price:"
+msgid "Completion Price"
+msgstr "Preu de finalització"
+
+msgctxt "field:ai.model.openrouter,context_length:"
+msgid "Context Length"
+msgstr "Longitud del context"
+
+msgctxt "field:ai.model.openrouter,created:"
+msgid "Created"
+msgstr "Creat"
+
+msgctxt "field:ai.model.openrouter,description:"
+msgid "Description"
+msgstr "Descripció"
+
+msgctxt "field:ai.model.openrouter,image_price:"
+msgid "Image Price"
+msgstr "Preu de la imatge"
+
+msgctxt "field:ai.model.openrouter,input_cache_read_price:"
+msgid "Input Cache Read Price"
+msgstr "Preu de lectura de la memòria cau d'entrada"
+
+msgctxt "field:ai.model.openrouter,input_cache_write_price:"
+msgid "Input Cache Write Price"
+msgstr "Preu d'escriptura de la memòria cau d'entrada"
+
+msgctxt "field:ai.model.openrouter,input_modalities:"
+msgid "Input Modalities"
+msgstr "Modalitats d'entrada"
+
+msgctxt "field:ai.model.openrouter,instruct_type:"
+msgid "Instruct Type"
+msgstr "Tipus d'instrucció"
+
+msgctxt "field:ai.model.openrouter,internal_reasoning_price:"
+msgid "Internal Reasoning Price"
+msgstr "Preu del raonament intern"
+
+msgctxt "field:ai.model.openrouter,modality:"
+msgid "Modality"
+msgstr "Modalitat"
+
+msgctxt "field:ai.model.openrouter,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:ai.model.openrouter,openrouter_id:"
+msgid "OpenRouter ID"
+msgstr "ID d'OpenRouter"
+
+msgctxt "field:ai.model.openrouter,output_modalities:"
+msgid "Output Modalities"
+msgstr "Modalitats de sortida"
+
+msgctxt "field:ai.model.openrouter,per_request_limits:"
+msgid "Per Request Limits"
+msgstr "Límits per sol·licitud"
+
+msgctxt "field:ai.model.openrouter,prompt_price:"
+msgid "Prompt Price"
+msgstr "Preu del prompt"
+
+msgctxt "field:ai.model.openrouter,raw_data:"
+msgid "Raw Data"
+msgstr "Dades en brut"
+
+msgctxt "field:ai.model.openrouter,request_price:"
+msgid "Request Price"
+msgstr "Preu per sol·licitud"
+
+msgctxt "field:ai.model.openrouter,supported_parameters:"
+msgid "Supported Parameters"
+msgstr "Paràmetres compatibles"
+
+msgctxt "field:ai.model.openrouter,tokenizer:"
+msgid "Tokenizer"
+msgstr "Tokenitzador"
+
+msgctxt "field:ai.model.openrouter,top_provider_context_length:"
+msgid "Top Provider Context Length"
+msgstr "Longitud del context del proveïdor principal"
+
+msgctxt "field:ai.model.openrouter,top_provider_is_moderated:"
+msgid "Top Provider Is Moderated"
+msgstr "El proveïdor principal està moderat"
+
+msgctxt "field:ai.model.openrouter,top_provider_max_completion_tokens:"
+msgid "Top Provider Max Completion Tokens"
+msgstr "Tokens de finalització màxima del proveïdor principal"
+
+msgctxt "field:ai.model.openrouter,web_search_price:"
+msgid "Web Search Price"
+msgstr "Preu de la cerca web"
+
+msgctxt "model:ir.action,name:act_ai_model"
+msgid "Models"
+msgstr "Models"
+
+msgctxt "model:ir.action,name:act_chat_instruction"
+msgid "Configuration"
+msgstr "Configuració"
+
+msgctxt "model:ir.action,name:act_openrouter_model"
+msgid "OpenRouter Models"
+msgstr "Models d'OpenRouter"
+
+msgctxt "model:ir.message,text:msg_assistant_authentication_failed"
+msgid ""
+"Authentication with the AI service failed. Please check the API key "
+"configuration."
+msgstr ""
+"Ha fallat l'autenticació amb el servei d'IA. Si us plau, reviseu la "
+"configuració de la clau d'API."
+
+msgctxt "model:ir.message,text:msg_assistant_no_response"
+msgid "AI server returned no response"
+msgstr "El servidor d'IA no ha retornat cap resposta"
+
+msgctxt "model:ir.message,text:msg_assistant_unreachable"
+msgid ""
+"The AI service is currently experiencing issues. Please try again in a few "
+"minutes."
+msgstr ""
+"El servei d'IA té problemes actualment. Si us plau, torneu-ho a provar "
+"d'aquí a uns minuts."
+
+msgctxt "model:ir.message,text:msg_openrouter_model_id_unique"
+msgid "The OpenRouter model identifier must be unique."
+msgstr "L'identificador del model d'OpenRouter ha de ser únic."
+
+msgctxt "model:ir.message,text:msg_openrouter_model_sync_error"
+msgid "There was an error syncing OpenRouter models: %(error)s"
+msgstr "S'ha produït un error en sincronitzar els models d'OpenRouter: %(error)s"
+
+msgctxt "model:ir.ui.menu,name:menu_ai_model"
+msgid "Models"
+msgstr "Models"
+
+msgctxt "model:ir.ui.menu,name:menu_instruction"
+msgid "Configuration"
+msgstr "Configuració"
+
+msgctxt "model:ir.ui.menu,name:menu_openrouter_model"
+msgid "OpenRouter Models"
+msgstr "Models d'OpenRouter"
+
+msgctxt "model:ai.configuration,string:"
+msgid "Ai Configuration"
+msgstr "Configuració d'IA"
+
+msgctxt "model:ai.model,string:"
+msgid "Ai Model"
+msgstr "Model d'IA"
+
+msgctxt "model:ai.model.openrouter,string:"
+msgid "Ai Model Openrouter"
+msgstr "Model OpenRouter d'IA"
+
+msgctxt "selection:ir.cron,method:"
+msgid "Sync OpenRouter Models"
+msgstr "Sincronitza els models d'OpenRouter"
+
+msgctxt "selection:ai.model,provider:"
+msgid "OpenAI"
+msgstr "OpenAI"
+
+msgctxt "selection:ai.model,provider:"
+msgid "OpenRouter"
+msgstr "OpenRouter"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "High"
+msgstr "Alt"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "Low"
+msgstr "Baix"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "Medium"
+msgstr "Mitjà"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "None"
+msgstr "Cap"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "XHigh"
+msgstr "Molt alt"
+
+msgctxt "selection:ai.model,type:"
+msgid "Embedding"
+msgstr "Embedding"
+
+msgctxt "selection:ai.model,type:"
+msgid "LLM"
+msgstr "LLM"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Architecture"
+msgstr "Arquitectura"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Pricing"
+msgstr "Preus"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Token prices are shown per million tokens."
+msgstr "Els preus dels tokens es mostren per milió de tokens."
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Raw Data"
+msgstr "Dades en brut"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Top Provider"
+msgstr "Proveïdor principal"

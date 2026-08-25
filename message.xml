@@ -1,0 +1,22 @@
+<tryton>
+    <data grouped="1">
+        <record model="ir.message" id="msg_internal_server_error">
+            <field name="text">Internal Server Error</field>
+        </record>
+        <record model="ir.message" id="msg_assistant_unreachable">
+            <field name="text">The AI service is currently experiencing issues. Please try again in a few minutes.</field>
+        </record>
+        <record model="ir.message" id="msg_assistant_authentication_failed">
+            <field name="text">Authentication with the AI service failed. Please check the API key configuration.</field>
+        </record>
+        <record model="ir.message" id="msg_assistant_no_response">
+            <field name="text">AI server returned no response</field>
+        </record>
+        <record model="ir.message" id="msg_openrouter_model_id_unique">
+            <field name="text">The OpenRouter model identifier must be unique.</field>
+        </record>
+        <record model="ir.message" id="msg_openrouter_model_sync_error">
+            <field name="text">There was an error syncing OpenRouter models: %(error)s</field>
+        </record>
+    </data>
+</tryton>

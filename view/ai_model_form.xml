@@ -1,0 +1,16 @@
+<form>
+    <label name="name"/>
+    <field name="name"/>
+    <label name="type"/>
+    <field name="type"/>
+    <label name="provider"/>
+    <field name="provider"/>
+    <label name="openrouter_model"/>
+    <field name="openrouter_model"/>
+    <label name="model_name"/>
+    <field name="model_name"/>
+    <label name="reasoning"/>
+    <field name="reasoning"/>
+    <label name="allow_web_search"/>
+    <field name="allow_web_search"/>
+</form>

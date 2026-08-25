@@ -1,0 +1,6 @@
+<form>
+    <label name="assistant_model"/>
+    <field name="assistant_model"/>
+    <label name="default_embedding_model"/>
+    <field name="default_embedding_model"/>
+</form>

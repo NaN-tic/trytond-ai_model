@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<tree>
+    <field name="name" expand="1"/>
+    <field name="openrouter_id"/>
+    <field name="context_length"/>
+    <field name="modality"/>
+    <field name="top_provider_is_moderated"/>
+    <field name="prompt_price" optional="1"/>
+    <field name="completion_price" optional="1"/>
+    <field name="request_price" optional="1"/>
+    <field name="image_price" optional="1"/>
+</tree>

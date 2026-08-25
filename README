@@ -1,0 +1,5 @@
+AI Model Module
+###############
+
+This module provides reusable AI model configuration, OpenRouter model
+management and a generic completion API for Tryton modules.
