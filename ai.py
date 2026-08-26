@@ -538,7 +538,7 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
         return OPENROUTER_CLIENT
 
     @classmethod
-    def get_default_assistant_client(cls):
+    def get_default_llm_client(cls):
         return OPENROUTER_CLIENT or OPENAI_CLIENT
 
     @classmethod
@@ -550,7 +550,7 @@ class AIConfiguration(ModelSingleton, ModelSQL, ModelView):
     'AI Configuration'
     __name__ = 'ai.configuration'
 
-    assistant_model = fields.Many2One('ai.model', 'Assistant Model',
+    default_llm = fields.Many2One('ai.model', 'Default LLM',
         domain=[('type', '=', 'llm')], ondelete='RESTRICT')
     default_embedding_model = fields.Many2One('ai.model',
         'Default Embedding', domain=[('type', '=', 'embedding')],
@@ -574,13 +574,10 @@ class AIConfiguration(ModelSingleton, ModelSQL, ModelView):
                 'default_embedding', 'default_embedding_model')
         super().__register__(module_name)
 
-    def get_assistant_client(self):
-        if self.assistant_model:
-            return self.assistant_model.get_client()
-        return AIModel.get_default_assistant_client()
-
-    def get_assistsant_client(self):
-        return self.get_assistant_client()
+    def get_default_llm_client(self):
+        if self.default_llm:
+            return self.default_llm.get_client()
+        return AIModel.get_default_llm_client()
 
     def get_default_embedding_client(self):
         if self.default_embedding_model:

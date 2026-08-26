@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 MODEL_LOW = 'openai/gpt-5.6-terra'
 
 
-def get_assistant_client():
+def get_default_llm_client():
     Configuration = Pool().get('ai.configuration')
-    return Configuration(1).get_assistant_client()
+    return Configuration(1).get_default_llm_client()
 
 
 def get_completion(messages, model=MODEL_LOW, tools=None, tool_choice=None,
@@ -23,7 +23,7 @@ def get_completion(messages, model=MODEL_LOW, tools=None, tool_choice=None,
     provider = None
     model_name = model
     kwargs = {}
-    client = client or get_assistant_client()
+    client = client or get_default_llm_client()
 
     if hasattr(model, 'provider') and hasattr(model, 'model_name'):
         provider = model.provider
@@ -37,8 +37,8 @@ def get_completion(messages, model=MODEL_LOW, tools=None, tool_choice=None,
     else:
         Configuration = Pool().get('ai.configuration')
         configuration = Configuration(1)
-        if configuration.assistant_model:
-            provider = configuration.assistant_model.provider
+        if configuration.default_llm:
+            provider = configuration.default_llm.provider
         elif client is OPENAI_CLIENT:
             provider = 'openai'
         elif client is OPENROUTER_CLIENT:

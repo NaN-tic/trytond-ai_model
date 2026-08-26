@@ -2,9 +2,9 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:ai.configuration,assistant_model:"
-msgid "Assistant Model"
-msgstr "Model de l'assistent"
+msgctxt "field:ai.configuration,default_llm:"
+msgid "Default LLM"
+msgstr "LLM predeterminat"
 
 msgctxt "field:ai.configuration,default_embedding_model:"
 msgid "Default Embedding"

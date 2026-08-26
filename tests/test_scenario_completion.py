@@ -71,7 +71,7 @@ class TestCompletion(unittest.TestCase):
                         'type': 'llm',
                         }])
             Transaction()._locked_tables.add(Configuration._table)
-            Configuration.create([{'assistant_model': ai_model.id}])
+            Configuration.create([{'default_llm': ai_model.id}])
             action, = ActionWindow.create([{
                         'name': 'Example Model',
                         'res_model': OpenRouterModel.__name__,
@@ -80,6 +80,13 @@ class TestCompletion(unittest.TestCase):
                         'model': OpenRouterModel.__name__,
                         'perm_read': True,
                         }])
+
+            self.assertIn('default_llm', Configuration._fields)
+            self.assertNotIn('assistant_model', Configuration._fields)
+            self.assertTrue(hasattr(
+                    Configuration, 'get_default_llm_client'))
+            self.assertFalse(hasattr(
+                    Configuration, 'get_assistant_client'))
 
             table_renames = [
                 ('ai_model_openrouter', 'nantic_ai_model_openrouter'),
@@ -134,7 +141,7 @@ class TestCompletion(unittest.TestCase):
 
             self.assertEqual(AIModel(ai_model.id).name, 'Example model')
             self.assertEqual(
-                Configuration(1).assistant_model.id, ai_model.id)
+                Configuration(1).default_llm.id, ai_model.id)
             self.assertFalse(ActionWindow.search([
                         ('id', '=', action.id),
                         ]))
