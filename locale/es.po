@@ -13,9 +13,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 25.04.0\n"
 
-msgctxt "field:ai.configuration,assistant_model:"
-msgid "Assistant Model"
-msgstr "Modelo del asistente"
+msgctxt "field:ai.configuration,default_llm:"
+msgid "Default LLM"
+msgstr "LLM predeterminado"
 
 msgctxt "field:ai.configuration,default_embedding_model:"
 msgid "Default Embedding"
