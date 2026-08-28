@@ -10,5 +10,6 @@ def register():
         ai.Cron,
         ai.OpenRouterModel,
         ai.AIModel,
+        ai.AIModelCost,
         ai.AIConfiguration,
         module='ai_model', type_='model')

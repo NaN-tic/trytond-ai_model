@@ -12,7 +12,7 @@ from trytond.model import (
     DeactivableMixin, ModelSingleton, ModelSQL, ModelView, Unique, fields)
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Bool, Eval
-from trytond.transaction import Transaction
+from trytond.transaction import Transaction, without_check_access
 
 OPENAI_KEY = config_.config.get('openai', 'api_key')
 OPENAI_ORGANIZATION = config_.config.get('openai', 'organization')
@@ -27,6 +27,8 @@ OPENROUTER_MODELS_URL = 'https://openrouter.ai/api/v1/models'
 OPENROUTER_REASONING_PARAMETERS = {'reasoning', 'reasoning_effort'}
 OPENROUTER_WEB_SEARCH_PARAMETERS = {'web_search_options'}
 TOKENS_PER_MILLION = Decimal(1000000)
+DEFAULT_LLM_MODEL = 'openai/gpt-5.6-terra'
+DEFAULT_EMBEDDING_MODEL = 'openai/text-embedding-3-small'
 MOVED_MODEL_DATA = {
     'view_chat_instruction_form',
     'act_chat_instruction',
@@ -447,13 +449,14 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
             ('openrouter', 'OpenRouter'),
             ('openai', 'OpenAI'),
             ], 'Provider', required=True)
-    openrouter_model = fields.Many2One(
-        'ai.model.openrouter', 'OpenRouter Model',
-        domain=[('active', '=', True)],
-        states={
-            'invisible': Eval('provider') != 'openrouter',
-            },
-        depends=['provider'])
+    openrouter_model = fields.Function(fields.Many2One(
+            'ai.model.openrouter', 'OpenRouter Model',
+            domain=[('active', '=', True)],
+            states={
+                'invisible': Eval('provider') != 'openrouter',
+                },
+            depends=['provider', 'model_name']),
+        'get_openrouter_model', setter='set_openrouter_model')
     model_name = fields.Char('Model Name', required=True)
     supports_reasoning = fields.Function(fields.Boolean('Supports Reasoning'),
         'on_change_with_supports_reasoning')
@@ -493,6 +496,12 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
         table = cls.__table__()
         cursor.execute(*table.update(
                 [table.type], ['llm'], where=table.type == None))
+        cursor.execute(*table.update(
+                [table.provider], ['openrouter'],
+                where=table.type == 'embedding'))
+        handler = cls.__table_handler__(module_name)
+        if handler.column_exist('openrouter_model'):
+            handler.drop_column('openrouter_model')
 
     @staticmethod
     def default_provider():
@@ -501,6 +510,44 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
     @staticmethod
     def default_type():
         return 'llm'
+
+    @classmethod
+    def get_openrouter_model(cls, records, name):
+        OpenRouterModel = Pool().get('ai.model.openrouter')
+        model_names = {
+            record.model_name for record in records
+            if record.provider == 'openrouter' and record.model_name}
+        with Transaction().set_context(active_test=False):
+            openrouter_models = OpenRouterModel.search([
+                    ('openrouter_id', 'in', list(model_names)),
+                    ]) if model_names else []
+        models_by_name = {
+            model.openrouter_id: model.id for model in openrouter_models}
+        return {
+            record.id: (models_by_name.get(record.model_name)
+                if record.provider == 'openrouter' else None)
+            for record in records
+            }
+
+    @classmethod
+    def set_openrouter_model(cls, records, name, value):
+        if value:
+            openrouter_model = Pool().get('ai.model.openrouter')(value)
+            cls.write(records, {
+                    'provider': 'openrouter',
+                    'model_name': openrouter_model.openrouter_id,
+                    })
+
+    @fields.depends('provider', 'model_name')
+    def on_change_with_openrouter_model(self, name=None):
+        if self.provider != 'openrouter' or not self.model_name:
+            return
+        with Transaction().set_context(active_test=False):
+            models = Pool().get('ai.model.openrouter').search([
+                    ('openrouter_id', '=', self.model_name),
+                    ], limit=1, order=[])
+        if models:
+            return models[0].id
 
     @fields.depends('openrouter_model')
     def on_change_openrouter_model(self):
@@ -533,17 +580,69 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
             self.openrouter_model = None
 
     def get_client(self):
+        if self.type == 'embedding':
+            return OPENROUTER_CLIENT
         if self.provider == 'openai':
             return OPENAI_CLIENT
         return OPENROUTER_CLIENT
 
     @classmethod
-    def get_default_llm_client(cls):
-        return OPENROUTER_CLIENT or OPENAI_CLIENT
+    def get_or_create(cls, model_name, type_='llm'):
+        with without_check_access():
+            models = cls.search([
+                    ('model_name', '=', model_name),
+                    ('provider', '=', 'openrouter'),
+                    ('type', '=', type_),
+                    ], limit=1, order=[])
+            if models:
+                return models[0]
+
+            openrouter_models = Pool().get('ai.model.openrouter').search([
+                    ('openrouter_id', '=', model_name),
+                    ], limit=1, order=[])
+            values = {
+                'name': (openrouter_models[0].name
+                    if openrouter_models else model_name),
+                'model_name': model_name,
+                'provider': 'openrouter',
+                'type': type_,
+                }
+            model, = cls.create([values])
+            return model
+
+    def get_completion(self, messages, origin, **kwargs):
+        from .completion import get_completion
+        return get_completion(self, messages, origin, **kwargs)
+
+    def get_embeddings(self, input_, origin, **kwargs):
+        from .completion import get_embeddings
+        return get_embeddings(self, input_, origin, **kwargs)
+
+
+class AIModelCost(ModelSQL, ModelView):
+    'AI Model Cost'
+    __name__ = 'ai.model.cost'
+
+    origin = fields.Reference(
+        'Origin', selection='get_origins', required=True, readonly=True)
+    model = fields.Many2One(
+        'ai.model', 'Model', required=True, readonly=True,
+        ondelete='RESTRICT')
+    input_tokens = fields.Integer('Input Tokens', readonly=True)
+    cached_input_tokens = fields.Integer(
+        'Cached Input Tokens', readonly=True)
+    output_tokens = fields.Integer('Output Tokens', readonly=True)
+    cost = fields.Numeric('Cost', digits=(16, 8), readonly=True)
+    currency = fields.Char('Currency', readonly=True)
+    duration = fields.TimeDelta('Duration', required=True, readonly=True)
 
     @classmethod
-    def get_default_embedding_client(cls):
-        return OPENAI_CLIENT
+    def get_origins(cls):
+        Model = Pool().get('ir.model')
+        return [
+            (model.name, model.string)
+            for model in Model.search([], order=[('string', 'ASC')])
+            ]
 
 
 class AIConfiguration(ModelSingleton, ModelSQL, ModelView):
@@ -553,7 +652,10 @@ class AIConfiguration(ModelSingleton, ModelSQL, ModelView):
     default_llm = fields.Many2One('ai.model', 'Default LLM',
         domain=[('type', '=', 'llm')], ondelete='RESTRICT')
     default_embedding_model = fields.Many2One('ai.model',
-        'Default Embedding', domain=[('type', '=', 'embedding')],
+        'Default Embedding', domain=[
+            ('type', '=', 'embedding'),
+            ('provider', '=', 'openrouter'),
+            ],
         ondelete='RESTRICT')
 
     @classmethod
@@ -575,11 +677,17 @@ class AIConfiguration(ModelSingleton, ModelSQL, ModelView):
         super().__register__(module_name)
 
     def get_default_llm_client(self):
-        if self.default_llm:
-            return self.default_llm.get_client()
-        return AIModel.get_default_llm_client()
+        return self.get_default_llm_model().get_client()
 
     def get_default_embedding_client(self):
+        return self.get_default_embedding_model().get_client()
+
+    def get_default_llm_model(self):
+        return self.default_llm or Pool().get('ai.model').get_or_create(
+            DEFAULT_LLM_MODEL)
+
+    def get_default_embedding_model(self):
         if self.default_embedding_model:
-            return self.default_embedding_model.get_client()
-        return AIModel.get_default_embedding_client()
+            return self.default_embedding_model
+        return Pool().get('ai.model').get_or_create(
+            DEFAULT_EMBEDDING_MODEL, type_='embedding')

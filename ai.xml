@@ -79,6 +79,55 @@
             <field name="perm_delete" eval="True"/>
         </record>
 
+        <record model="ir.ui.view" id="view_ai_model_cost_form">
+            <field name="model">ai.model.cost</field>
+            <field name="type">form</field>
+            <field name="name">ai_model_cost_form</field>
+        </record>
+        <record model="ir.ui.view" id="view_ai_model_cost_list">
+            <field name="model">ai.model.cost</field>
+            <field name="type">tree</field>
+            <field name="name">ai_model_cost_list</field>
+        </record>
+        <record model="ir.action.act_window" id="act_ai_model_cost">
+            <field name="name">Costs</field>
+            <field name="res_model">ai.model.cost</field>
+        </record>
+        <record model="ir.action.act_window.view"
+                id="act_ai_model_cost_form">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="view_ai_model_cost_form"/>
+            <field name="act_window" ref="act_ai_model_cost"/>
+        </record>
+        <record model="ir.action.act_window.view"
+                id="act_ai_model_cost_list">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="view_ai_model_cost_list"/>
+            <field name="act_window" ref="act_ai_model_cost"/>
+        </record>
+        <menuitem id="menu_ai_model_cost" parent="menu_ai"
+            sequence="30" icon="tryton-list" action="act_ai_model_cost"/>
+        <record model="ir.ui.menu-res.group"
+                id="menu_ai_model_cost_group_admin">
+            <field name="menu" ref="menu_ai_model_cost"/>
+            <field name="group" ref="res.group_admin"/>
+        </record>
+        <record model="ir.model.access" id="access_ai_model_cost">
+            <field name="model">ai.model.cost</field>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_ai_model_cost_admin">
+            <field name="model">ai.model.cost</field>
+            <field name="group" ref="res.group_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+
         <record model="ir.ui.view" id="view_openrouter_model_form">
             <field name="model">ai.model.openrouter</field>
             <field name="type">form</field>
