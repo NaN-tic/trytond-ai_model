@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<tree>
+    <field name="create_date"/>
+    <field name="origin"/>
+    <field name="model"/>
+    <field name="input_tokens"/>
+    <field name="cached_input_tokens"/>
+    <field name="output_tokens"/>
+    <field name="cost"/>
+    <field name="currency"/>
+    <field name="duration"/>
+</tree>

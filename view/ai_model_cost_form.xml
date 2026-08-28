@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<form>
+    <label name="origin"/>
+    <field name="origin"/>
+    <label name="model"/>
+    <field name="model"/>
+    <label name="input_tokens"/>
+    <field name="input_tokens"/>
+    <label name="cached_input_tokens"/>
+    <field name="cached_input_tokens"/>
+    <label name="output_tokens"/>
+    <field name="output_tokens"/>
+    <label name="cost"/>
+    <field name="cost"/>
+    <label name="currency"/>
+    <field name="currency"/>
+    <label name="duration"/>
+    <field name="duration"/>
+</form>
