@@ -4,6 +4,7 @@ from decimal import Decimal
 import requests
 from openai import OpenAI
 from sql import Table
+from sql.operators import Exists
 from trytond import backend
 import trytond.config as config_
 from trytond.exceptions import UserError
@@ -76,12 +77,17 @@ def migrate_model_data():
     if not backend.TableHandler.table_exist('ir_model_data'):
         return
     model_data = Table('ir_model_data')
+    target_model_data = Table('ir_model_data')
     cursor = Transaction().connection.cursor()
     cursor.execute(*model_data.update(
             [model_data.module], ['ai_model'],
-            where=(model_data.module == 'nantic_ai_model')
-            | ((model_data.module == 'nantic_connection')
-                & model_data.fs_id.in_(tuple(sorted(MOVED_MODEL_DATA))))))
+            where=((model_data.module == 'nantic_ai_model')
+                | ((model_data.module == 'nantic_connection')
+                    & model_data.fs_id.in_(tuple(sorted(MOVED_MODEL_DATA)))))
+            & ~Exists(target_model_data.select(
+                    target_model_data.id,
+                    where=(target_model_data.module == 'ai_model')
+                    & (target_model_data.fs_id == model_data.fs_id)))))
 
 
 def migrate_models():
