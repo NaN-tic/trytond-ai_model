@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <tree>
-    <field name="create_date"/>
+    <field name="create_date" widget="date"/>
+    <field name="create_date" widget="time"/>
     <field name="origin"/>
     <field name="model"/>
     <field name="input_tokens"/>
