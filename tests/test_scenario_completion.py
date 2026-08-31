@@ -75,6 +75,7 @@ class TestCompletion(unittest.TestCase):
                         'openrouter_model': openrouter_model.id,
                         'provider': 'openrouter',
                         'type': 'llm',
+                        'llm_pdf_engine': 'native',
                         }])
             Transaction()._locked_tables.add(Configuration._table)
             Configuration.create([{'default_llm': ai_model.id}])
@@ -175,12 +176,21 @@ class TestCompletion(unittest.TestCase):
                 usage=usage,
                 choices=[SimpleNamespace(
                         message=SimpleNamespace(content='Completion'))])
+            request = {}
             client = SimpleNamespace(
                 chat=SimpleNamespace(completions=SimpleNamespace(
-                        create=lambda **kwargs: response)))
+                        create=lambda **kwargs: (
+                            request.update(kwargs) or response))))
 
             result, error = ai_model.get_completion(
-                [{'role': 'user', 'content': 'Hello'}], ai_model,
+                [{'role': 'user', 'content': [{
+                                'type': 'file',
+                                'file': {
+                                    'filename': 'document.pdf',
+                                    'file_data': (
+                                        'data:application/pdf;base64,UERG'),
+                                    },
+                                }]}], ai_model,
                 client=client)
 
             self.assertFalse(error)
@@ -195,6 +205,12 @@ class TestCompletion(unittest.TestCase):
             self.assertEqual(cost.cost, Decimal('0.00042000'))
             self.assertEqual(cost.currency, 'USD')
             self.assertGreaterEqual(cost.duration.total_seconds(), 0)
+            self.assertEqual(request['extra_body'], {
+                    'plugins': [{
+                            'id': 'file-parser',
+                            'pdf': {'engine': 'native'},
+                            }],
+                    })
             amount, currency = completion.get_completion_cost(
                 SimpleNamespace(usage=SimpleNamespace(
                         prompt_tokens=100, completion_tokens=50)),

@@ -136,6 +136,27 @@ def get_completion(model, messages, origin, tools=None, tool_choice=None,
         if model.allow_web_search:
             model_kwargs['web_search_options'] = {}
 
+    if model.provider == 'openrouter' and model.llm_pdf_engine:
+        has_file = any(
+            isinstance(message, dict)
+            and isinstance(message.get('content'), list)
+            and any(
+                isinstance(part, dict) and part.get('type') == 'file'
+                for part in message['content'])
+            for message in messages or [])
+        if has_file:
+            extra_body = dict(extra_body or {})
+            plugins = list(extra_body.get('plugins') or [])
+            if not any(
+                    isinstance(plugin, dict)
+                    and plugin.get('id') == 'file-parser'
+                    for plugin in plugins):
+                plugins.append({
+                        'id': 'file-parser',
+                        'pdf': {'engine': model.llm_pdf_engine},
+                        })
+                extra_body['plugins'] = plugins
+
     for retry in range(3):
         try:
             started_at = time.monotonic()
