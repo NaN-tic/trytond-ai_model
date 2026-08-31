@@ -488,6 +488,16 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
                     & ~Eval('supports_web_search'))),
             }, depends=[
                 'type', 'openrouter_model', 'supports_web_search'])
+    llm_pdf_engine = fields.Selection([
+            (None, ''),
+            ('mistral-ocr', 'Mistral OCR (best for scanned documents)'),
+            ('native', 'Native (best for born-digital PDFs)'),
+            ('pdf-text', 'PDF Text (balanced)'),
+            ], 'LLM PDF Engine', states={
+                'invisible': (
+                    (Eval('type') != 'llm')
+                    | (Eval('provider') != 'openrouter')),
+                }, depends=['type', 'provider'])
 
     @classmethod
     def __register__(cls, module_name):

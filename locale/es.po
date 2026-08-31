@@ -25,6 +25,10 @@ msgctxt "field:ai.model,allow_web_search:"
 msgid "Allow Web Search"
 msgstr "Permitir búsqueda web"
 
+msgctxt "field:ai.model,llm_pdf_engine:"
+msgid "LLM PDF Engine"
+msgstr "Motor PDF de LLM"
+
 msgctxt "field:ai.model,model_name:"
 msgid "Model Name"
 msgstr "Nombre del modelo"
@@ -228,6 +232,18 @@ msgstr "OpenAI"
 msgctxt "selection:ai.model,provider:"
 msgid "OpenRouter"
 msgstr "OpenRouter"
+
+msgctxt "selection:ai.model,llm_pdf_engine:"
+msgid "Mistral OCR (best for scanned documents)"
+msgstr "Mistral OCR (ideal para documentos escaneados)"
+
+msgctxt "selection:ai.model,llm_pdf_engine:"
+msgid "Native (best for born-digital PDFs)"
+msgstr "Nativo (ideal para PDFs digitales)"
+
+msgctxt "selection:ai.model,llm_pdf_engine:"
+msgid "PDF Text (balanced)"
+msgstr "Texto PDF (equilibrado)"
 
 msgctxt "selection:ai.model,reasoning:"
 msgid "High"

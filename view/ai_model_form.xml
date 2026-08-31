@@ -13,4 +13,6 @@
     <field name="reasoning"/>
     <label name="allow_web_search"/>
     <field name="allow_web_search"/>
+    <label name="llm_pdf_engine"/>
+    <field name="llm_pdf_engine"/>
 </form>
