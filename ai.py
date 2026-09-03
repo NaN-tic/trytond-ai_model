@@ -413,7 +413,9 @@ class OpenRouterModel(DeactivableMixin, ModelSQL, ModelView):
         models = cls._fetch_openrouter_models()
         existing = {
             model.openrouter_id: model
-            for model in cls.search([], order=[])
+            for model in cls.search([
+                    ('active', 'in', [True, False]),
+                    ], order=[])
             }
         seen = set()
         to_create = []
