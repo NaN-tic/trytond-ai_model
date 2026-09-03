@@ -4,10 +4,10 @@
     <field name="create_date" widget="time"/>
     <field name="origin"/>
     <field name="model"/>
-    <field name="input_tokens"/>
-    <field name="cached_input_tokens"/>
-    <field name="output_tokens"/>
-    <field name="cost"/>
+    <field name="input_tokens" sum="1"/>
+    <field name="cached_input_tokens" sum="1"/>
+    <field name="output_tokens" sum="1"/>
+    <field name="cost" sum="1"/>
     <field name="currency"/>
-    <field name="duration"/>
+    <field name="duration" sum="1"/>
 </tree>
