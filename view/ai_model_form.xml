@@ -1,8 +1,12 @@
-<form>
+<form col="6">
     <label name="name"/>
     <field name="name"/>
     <label name="type"/>
     <field name="type"/>
+    <group id="checkboxes" colspan="2">
+        <label name="active"/>
+        <field name="active"/>
+    </group>
     <label name="provider"/>
     <field name="provider"/>
     <label name="openrouter_model"/>
