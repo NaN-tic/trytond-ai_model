@@ -135,8 +135,8 @@ def get_completion(model, messages, origin, tools=None, tool_choice=None,
     if model.provider == 'openai':
         if model.reasoning:
             model_kwargs['reasoning_effort'] = model.reasoning
-        if model.allow_web_search:
-            model_kwargs['web_search_options'] = {}
+    if model.allow_web_search == 'native':
+        model_kwargs['web_search_options'] = {}
 
     if model.provider == 'openrouter' and model.llm_pdf_engine:
         has_file = any(

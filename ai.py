@@ -483,13 +483,11 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
                         & ~Eval('supports_reasoning'))),
                 }, depends=[
                     'type', 'openrouter_model', 'supports_reasoning'])
-    allow_web_search = fields.Boolean('Allow Web Search', states={
-            'invisible': (
-                (Eval('type') != 'llm')
-                | (Bool(Eval('openrouter_model'))
-                    & ~Eval('supports_web_search'))),
-            }, depends=[
-                'type', 'openrouter_model', 'supports_web_search'])
+    allow_web_search = fields.Selection(
+        'get_web_search_options', 'Web Search', required=True,
+        states={
+            'invisible': Eval('type') != 'llm',
+            }, depends=['type'])
     llm_pdf_engine = fields.Selection([
             (None, ''),
             ('mistral-ocr', 'Mistral OCR (best for scanned documents)'),
@@ -510,6 +508,13 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
             backend.TableHandler.table_rename(old_table, cls._table)
         migrate_models()
         migrate_model_fields(cls)
+        handler = cls.__table_handler__(module_name)
+        migrate_web_search = (
+            handler.column_exist('allow_web_search')
+            and handler.column_is_type('allow_web_search', 'boolean'))
+        if migrate_web_search:
+            handler.column_rename(
+                'allow_web_search', 'allow_web_search_boolean')
         super().__register__(module_name)
         table = cls.__table__()
         cursor.execute(*table.update(
@@ -518,6 +523,15 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
                 [table.provider], ['openrouter'],
                 where=table.type == 'embedding'))
         handler = cls.__table_handler__(module_name)
+        if migrate_web_search:
+            cursor.execute(*table.update(
+                    [table.allow_web_search], ['native'],
+                    where=table.allow_web_search_boolean == True))
+            cursor.execute(*table.update(
+                    [table.allow_web_search], ['prohibited'],
+                    where=(table.allow_web_search_boolean != True)
+                    | (table.allow_web_search_boolean == None)))
+            handler.drop_column('allow_web_search_boolean')
         if handler.column_exist('openrouter_model'):
             handler.drop_column('openrouter_model')
 
@@ -528,6 +542,22 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
     @staticmethod
     def default_type():
         return 'llm'
+
+    @staticmethod
+    def default_allow_web_search():
+        return 'prohibited'
+
+    @fields.depends(
+        'type', 'provider', 'openrouter_model',
+        '_parent_openrouter_model.supported_parameters',
+        '_parent_openrouter_model.raw_data')
+    def get_web_search_options(self):
+        options = [('prohibited', 'Prohibited')]
+        if (self.type == 'llm'
+                and (self.provider != 'openrouter'
+                    or self.on_change_with_supports_web_search())):
+            options.append(('native', 'Native'))
+        return options
 
     @classmethod
     def get_openrouter_model(cls, records, name):
@@ -584,12 +614,21 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
             OPENROUTER_REASONING_PARAMETERS)
 
     @fields.depends(
-        'openrouter_model', '_parent_openrouter_model.supported_parameters',
+        'provider', 'model_name', 'openrouter_model',
+        '_parent_openrouter_model.supported_parameters',
         '_parent_openrouter_model.raw_data')
     def on_change_with_supports_web_search(self, name=None):
-        if not self.openrouter_model:
+        if self.provider != 'openrouter':
             return True
-        return self.openrouter_model.supports_any_parameter(
+        openrouter_model = self.openrouter_model
+        if not openrouter_model and self.model_name:
+            models = Pool().get('ai.model.openrouter').search([
+                    ('openrouter_id', '=', self.model_name),
+                    ], limit=1, order=[])
+            openrouter_model = models[0] if models else None
+        if not openrouter_model:
+            return False
+        return openrouter_model.supports_any_parameter(
             OPENROUTER_WEB_SEARCH_PARAMETERS)
 
     @fields.depends('provider', 'openrouter_model')
