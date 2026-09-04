@@ -22,8 +22,16 @@ msgid "Default Embedding"
 msgstr "Embedding predeterminado"
 
 msgctxt "field:ai.model,allow_web_search:"
-msgid "Allow Web Search"
-msgstr "Permitir búsqueda web"
+msgid "Web Search"
+msgstr "Búsqueda web"
+
+msgctxt "selection:ai.model,allow_web_search:"
+msgid "Native"
+msgstr "Nativa"
+
+msgctxt "selection:ai.model,allow_web_search:"
+msgid "Prohibited"
+msgstr "Prohibida"
 
 msgctxt "field:ai.model,llm_pdf_engine:"
 msgid "LLM PDF Engine"
