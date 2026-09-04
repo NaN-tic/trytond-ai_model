@@ -6,7 +6,7 @@ from decimal import Decimal
 from openai import APIStatusError, AuthenticationError, PermissionDeniedError
 from trytond.i18n import gettext
 from trytond.pool import Pool
-from trytond.transaction import without_check_access
+from trytond.transaction import Transaction, without_check_access
 from unidecode import unidecode
 
 from .ai import DEFAULT_LLM_MODEL
@@ -96,21 +96,23 @@ def get_completion_cost(response, model):
 def register_cost(response, model, origin, duration):
     if not getattr(origin, 'id', None):
         raise ValueError('The cost origin must be a saved record')
-    Cost = Pool().get('ai.model.cost')
     usage = _get_attr_or_key(response, 'usage')
     input_tokens, cached_tokens, output_tokens = _get_usage_tokens(usage)
     amount, currency = get_completion_cost(response, model)
-    with without_check_access():
-        Cost.create([{
-                    'origin': str(origin),
-                    'model': model.id,
-                    'input_tokens': input_tokens,
-                    'cached_input_tokens': cached_tokens,
-                    'output_tokens': output_tokens,
-                    'cost': amount,
-                    'currency': currency,
-                    'duration': duration,
-                    }])
+    # The API usage has already occurred and must survive a caller rollback.
+    with Transaction().new_transaction():
+        Cost = Pool().get('ai.model.cost')
+        with without_check_access():
+            Cost.create([{
+                        'origin': str(origin),
+                        'model': model.id,
+                        'input_tokens': input_tokens,
+                        'cached_input_tokens': cached_tokens,
+                        'output_tokens': output_tokens,
+                        'cost': amount,
+                        'currency': currency,
+                        'duration': duration,
+                        }])
 
 
 def get_completion(model, messages, origin, tools=None, tool_choice=None,
