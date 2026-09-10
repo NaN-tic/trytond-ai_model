@@ -689,7 +689,7 @@ class AIModelCost(ModelSQL, ModelView):
     cached_input_tokens = fields.Integer(
         'Cached Input Tokens', readonly=True)
     output_tokens = fields.Integer('Output Tokens', readonly=True)
-    cost = fields.Numeric('Cost', digits=(16, 8), readonly=True)
+    cost = fields.Numeric('Cost', digits=(16, 12), readonly=True)
     currency = fields.Char('Currency', readonly=True)
     duration = fields.TimeDelta('Duration', required=True, readonly=True)
 
