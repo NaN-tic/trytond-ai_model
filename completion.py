@@ -4,6 +4,7 @@ import time
 from decimal import Decimal
 
 from openai import APIStatusError, AuthenticationError, PermissionDeniedError
+from trytond.config import config
 from trytond.i18n import gettext
 from trytond.pool import Pool
 from trytond.transaction import Transaction, without_check_access
@@ -14,6 +15,8 @@ from .ai import DEFAULT_LLM_MODEL
 logger = logging.getLogger(__name__)
 
 MODEL_LOW = DEFAULT_LLM_MODEL
+COMPLETION_TIMEOUT = config.getint(
+    'ai_model', 'completion_timeout', default=300)
 
 
 def _get_attr_or_key(data, name, default=None):
@@ -180,6 +183,7 @@ def get_completion(model, messages, origin, tools=None, tool_choice=None,
                 request['store'] = store
             if max_tokens is not None:
                 request['max_tokens'] = max_tokens
+            request['timeout'] = COMPLETION_TIMEOUT
             response = client.chat.completions.create(**request)
         except APIStatusError:
             logger.warning('OpenAI status error.', exc_info=True)

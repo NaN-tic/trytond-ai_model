@@ -211,6 +211,8 @@ class TestCompletion(unittest.TestCase):
                             'pdf': {'engine': 'native'},
                             }],
                     })
+            self.assertEqual(
+                request['timeout'], completion.COMPLETION_TIMEOUT)
             amount, currency = completion.get_completion_cost(
                 SimpleNamespace(usage=SimpleNamespace(
                         prompt_tokens=100, completion_tokens=50)),

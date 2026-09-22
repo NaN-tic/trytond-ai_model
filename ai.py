@@ -511,7 +511,7 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
         handler = cls.__table_handler__(module_name)
         migrate_web_search = (
             handler.column_exist('allow_web_search')
-            and handler.column_is_type('allow_web_search', 'boolean'))
+            and handler.column_is_type('allow_web_search', 'BOOL'))
         if migrate_web_search:
             handler.column_rename(
                 'allow_web_search', 'allow_web_search_boolean')
