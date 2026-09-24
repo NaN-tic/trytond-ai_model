@@ -226,15 +226,22 @@ class TestCompletion(unittest.TestCase):
             self.assertFalse(default_cost_access.perm_write)
             self.assertFalse(default_cost_access.perm_create)
             self.assertFalse(default_cost_access.perm_delete)
-            admin_group = ModelData.get_id('res', 'group_admin')
-            cost_access, = ModelAccess.search([
-                    ('model', '=', Cost.__name__),
-                    ('group', '=', admin_group),
-                    ])
-            self.assertTrue(cost_access.perm_read)
-            self.assertFalse(cost_access.perm_write)
-            self.assertFalse(cost_access.perm_create)
-            self.assertFalse(cost_access.perm_delete)
+            User = pool.get('res.user')
+            admin, = User.create([{
+                        'name': 'Cost Administrator',
+                        'login': 'cost_administrator',
+                        'administrator': True,
+                        }])
+            regular, = User.create([{
+                        'name': 'Cost User',
+                        'login': 'cost_user',
+                        }])
+            with Transaction().set_user(admin.id):
+                self.assertTrue(ModelAccess.get_access([Cost.__name__])[
+                        Cost.__name__]['read'])
+            with Transaction().set_user(regular.id):
+                self.assertFalse(ModelAccess.get_access([Cost.__name__])[
+                        Cost.__name__]['read'])
 
             with self.assertRaises(TypeError):
                 ai_model.get_completion(
