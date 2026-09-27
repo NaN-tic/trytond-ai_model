@@ -102,6 +102,8 @@ def register_cost(response, model, origin, duration):
     # The API usage has already occurred and must survive a caller rollback.
     with Transaction().new_transaction():
         Cost = Pool().get('ai.model.cost')
+        if amount is not None:
+            amount = amount.quantize(Decimal(1) / 10 ** Cost.cost.digits[1])
         with without_check_access():
             Cost.create([{
                         'origin': str(origin),
