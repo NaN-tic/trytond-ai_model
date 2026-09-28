@@ -654,18 +654,33 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
             if models:
                 return models[0]
 
-            openrouter_models = Pool().get('ai.model.openrouter').search([
-                    ('openrouter_id', '=', model_name),
-                    ], limit=1, order=[])
-            values = {
-                'name': (openrouter_models[0].name
-                    if openrouter_models else model_name),
-                'model_name': model_name,
-                'provider': 'openrouter',
-                'type': type_,
-                }
-            model, = cls.create([values])
-            return model
+        # Dynamically discovered models are infrastructure records.  Persist
+        # them independently so other independent writes, such as usage cost
+        # registration, can reference them before the caller transaction ends.
+        with Transaction().new_transaction():
+            with without_check_access():
+                models = cls.search([
+                        ('model_name', '=', model_name),
+                        ('provider', '=', 'openrouter'),
+                        ('type', '=', type_),
+                        ], limit=1, order=[])
+                if models:
+                    model_id = models[0].id
+                else:
+                    openrouter_models = Pool().get(
+                        'ai.model.openrouter').search([
+                            ('openrouter_id', '=', model_name),
+                            ], limit=1, order=[])
+                    values = {
+                        'name': (openrouter_models[0].name
+                            if openrouter_models else model_name),
+                        'model_name': model_name,
+                        'provider': 'openrouter',
+                        'type': type_,
+                        }
+                    model, = cls.create([values])
+                    model_id = model.id
+        return cls(model_id)
 
     def get_completion(self, messages, origin, **kwargs):
         from .completion import get_completion
