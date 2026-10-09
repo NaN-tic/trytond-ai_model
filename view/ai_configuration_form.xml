@@ -1,6 +1,8 @@
 <form>
     <label name="default_llm"/>
     <field name="default_llm"/>
+    <label name="system_llm"/>
+    <field name="system_llm"/>
     <label name="default_embedding_model"/>
     <field name="default_embedding_model"/>
 </form>

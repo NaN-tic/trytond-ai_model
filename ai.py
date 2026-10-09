@@ -720,6 +720,10 @@ class AIConfiguration(ModelSingleton, ModelSQL, ModelView):
 
     default_llm = fields.Many2One('ai.model', 'Default LLM',
         domain=[('type', '=', 'llm')], ondelete='RESTRICT')
+    system_llm = fields.Function(
+        fields.Many2One('ai.model', 'System LLM',
+            domain=[('type', '=', 'llm')], readonly=True),
+        'get_system_llm')
     default_embedding_model = fields.Many2One('ai.model',
         'Default Embedding', domain=[
             ('type', '=', 'embedding'),
@@ -751,9 +755,19 @@ class AIConfiguration(ModelSingleton, ModelSQL, ModelView):
     def get_default_embedding_client(self):
         return self.get_default_embedding_model().get_client()
 
+    @staticmethod
+    def default_system_llm():
+        try:
+            return Pool().get('ir.model.data').get_id(
+                'ai_model', 'model_system_llm')
+        except KeyError:
+            return None
+
+    def get_system_llm(self, name):
+        return self.default_system_llm()
+
     def get_default_llm_model(self):
-        return self.default_llm or Pool().get('ai.model').get_or_create(
-            DEFAULT_LLM_MODEL)
+        return self.default_llm or self.system_llm
 
     def get_default_embedding_model(self):
         if self.default_embedding_model:

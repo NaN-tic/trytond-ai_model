@@ -37,6 +37,16 @@
             <field name="perm_delete" eval="False"/>
         </record>
 
+        <record model="ai.model" id="model_system_llm">
+            <field name="name">OpenAI: GPT-5.6 Terra (system)</field>
+            <field name="type">llm</field>
+            <field name="provider">openrouter</field>
+            <field name="model_name">openai/gpt-5.6-terra</field>
+            <field name="reasoning">medium</field>
+            <field name="allow_web_search">prohibited</field>
+            <field name="llm_pdf_engine">native</field>
+        </record>
+
         <record model="ir.ui.view" id="view_ai_model_form">
             <field name="model">ai.model</field>
             <field name="type">form</field>

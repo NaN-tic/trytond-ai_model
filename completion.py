@@ -99,22 +99,30 @@ def register_cost(response, model, origin, duration):
     usage = _get_attr_or_key(response, 'usage')
     input_tokens, cached_tokens, output_tokens = _get_usage_tokens(usage)
     amount, currency = get_completion_cost(response, model)
-    # The API usage has already occurred and must survive a caller rollback.
+    values = {
+        'origin': str(origin),
+        'model': model.id,
+        'input_tokens': input_tokens,
+        'cached_input_tokens': cached_tokens,
+        'output_tokens': output_tokens,
+        'cost': amount,
+        'currency': currency,
+        'duration': duration,
+        }
+    # The API usage has already occurred and should survive a caller rollback.
+    # A model created by the caller is not visible to an independent PostgreSQL
+    # transaction, so its cost must be saved with the caller instead.
     with Transaction().new_transaction():
         Cost = Pool().get('ai.model.cost')
         if amount is not None:
             amount = amount.quantize(Decimal(1) / 10 ** Cost.cost.digits[1])
         with without_check_access():
-            Cost.create([{
-                        'origin': str(origin),
-                        'model': model.id,
-                        'input_tokens': input_tokens,
-                        'cached_input_tokens': cached_tokens,
-                        'output_tokens': output_tokens,
-                        'cost': amount,
-                        'currency': currency,
-                        'duration': duration,
-                        }])
+            AIModel = Pool().get('ai.model')
+            if AIModel.search([('id', '=', model.id)], limit=1):
+                Cost.create([values])
+                return
+    with without_check_access():
+        Cost.create([values])
 
 
 def get_completion(model, messages, origin, tools=None, tool_choice=None,
