@@ -13,7 +13,8 @@ from trytond.model import (
     DeactivableMixin, ModelSingleton, ModelSQL, ModelView, Unique, fields)
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Bool, Eval
-from trytond.transaction import Transaction, without_check_access
+from trytond.transaction import (
+    Transaction, TransactionError, without_check_access)
 
 OPENAI_KEY = config_.config.get('openai', 'api_key')
 OPENAI_ORGANIZATION = config_.config.get('openai', 'organization')
@@ -646,26 +647,37 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
     @classmethod
     def get_or_create(cls, model_name, type_='llm'):
         with without_check_access():
-            models = cls.search([
-                    ('model_name', '=', model_name),
-                    ('provider', '=', 'openrouter'),
-                    ('type', '=', type_),
-                    ], limit=1, order=[])
+            domain = [
+                ('model_name', '=', model_name),
+                ('provider', '=', 'openrouter'),
+                ('type', '=', type_),
+                ]
+            models = cls.search(domain, limit=1, order=[])
             if models:
                 return models[0]
 
-            openrouter_models = Pool().get('ai.model.openrouter').search([
-                    ('openrouter_id', '=', model_name),
-                    ], limit=1, order=[])
-            values = {
-                'name': (openrouter_models[0].name
-                    if openrouter_models else model_name),
-                'model_name': model_name,
-                'provider': 'openrouter',
-                'type': type_,
-                }
-            model, = cls.create([values])
-            return model
+            # Cost recording uses an independent transaction, so its model
+            # must be committed before making the API request.
+            with Transaction().new_transaction():
+                models = cls.search(domain, limit=1, order=[])
+                if not models:
+                    openrouter_models = Pool().get(
+                        'ai.model.openrouter').search([
+                            ('openrouter_id', '=', model_name),
+                            ], limit=1, order=[])
+                    cls.create([{
+                                'name': (openrouter_models[0].name
+                                    if openrouter_models else model_name),
+                                'model_name': model_name,
+                                'provider': 'openrouter',
+                                'type': type_,
+                                }])
+            models = cls.search(domain, limit=1, order=[])
+            if not models:
+                # Repeatable-read snapshots need Tryton to retry the caller
+                # before they can see the independently committed model.
+                raise TransactionError
+            return models[0]
 
     def get_completion(self, messages, origin, **kwargs):
         from .completion import get_completion
