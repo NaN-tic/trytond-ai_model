@@ -692,8 +692,11 @@ class AIModelCost(ModelSQL, ModelView):
     'AI Model Cost'
     __name__ = 'ai.model.cost'
 
+    # Costs are committed independently. The origin may not be committed yet,
+    # so Reference.get can temporarily resolve the stored reference to None.
+    # It can also remain missing if the caller rolls back after the API call.
     origin = fields.Reference(
-        'Origin', selection='get_origins', required=True, readonly=True)
+        'Origin', selection='get_origins', readonly=True)
     model = fields.Many2One(
         'ai.model', 'Model', required=True, readonly=True,
         ondelete='RESTRICT')
@@ -708,7 +711,7 @@ class AIModelCost(ModelSQL, ModelView):
     @classmethod
     def get_origins(cls):
         Model = Pool().get('ir.model')
-        return [
+        return [(None, '')] + [
             (model.name, model.string)
             for model in Model.search([], order=[('string', 'ASC')])
             ]
