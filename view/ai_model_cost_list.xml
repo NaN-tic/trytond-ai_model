@@ -2,12 +2,12 @@
 <tree>
     <field name="create_date" widget="date"/>
     <field name="create_date" widget="time"/>
-    <field name="origin"/>
-    <field name="model"/>
-    <field name="input_tokens" sum="1"/>
-    <field name="cached_input_tokens" sum="1"/>
-    <field name="output_tokens" sum="1"/>
-    <field name="cost" sum="1"/>
-    <field name="currency"/>
-    <field name="duration" sum="1"/>
+    <field name="origin" optional="0"/>
+    <field name="model" optional="0"/>
+    <field name="input_tokens" sum="1" optional="0"/>
+    <field name="cached_input_tokens" sum="1" optional="0"/>
+    <field name="output_tokens" sum="1" optional="0"/>
+    <field name="cost" sum="1" optional="0"/>
+    <field name="currency" optional="0"/>
+    <field name="duration" sum="1" optional="0"/>
 </tree>
