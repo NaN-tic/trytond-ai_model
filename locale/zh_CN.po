@@ -1,0 +1,341 @@
+#
+msgid ""
+msgstr ""
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "field:ai.configuration,default_llm:"
+msgid "Default LLM"
+msgstr "默认大语言模型"
+
+msgctxt "field:ai.configuration,default_embedding_model:"
+msgid "Default Embedding"
+msgstr "默认嵌入模型"
+
+msgctxt "field:ai.model,allow_web_search:"
+msgid "Web Search"
+msgstr "网络搜索"
+
+msgctxt "selection:ai.model,allow_web_search:"
+msgid "Native"
+msgstr "原生"
+
+msgctxt "selection:ai.model,allow_web_search:"
+msgid "Prohibited"
+msgstr "禁止"
+
+msgctxt "field:ai.model,llm_pdf_engine:"
+msgid "LLM PDF Engine"
+msgstr "大语言模型 PDF 引擎"
+
+msgctxt "field:ai.model,model_name:"
+msgid "Model Name"
+msgstr "模型名称"
+
+msgctxt "field:ai.model,name:"
+msgid "Name"
+msgstr "名称"
+
+msgctxt "field:ai.model,openrouter_model:"
+msgid "OpenRouter Model"
+msgstr "OpenRouter 模型"
+
+msgctxt "field:ai.model,provider:"
+msgid "Provider"
+msgstr "提供商"
+
+msgctxt "field:ai.model,reasoning:"
+msgid "Reasoning"
+msgstr "推理"
+
+msgctxt "field:ai.model,supports_reasoning:"
+msgid "Supports Reasoning"
+msgstr "支持推理"
+
+msgctxt "field:ai.model,supports_web_search:"
+msgid "Supports Web Search"
+msgstr "支持网络搜索"
+
+msgctxt "field:ai.model,type:"
+msgid "Type"
+msgstr "科目"
+
+msgctxt "field:ai.model.openrouter,completion_price:"
+msgid "Completion Price"
+msgstr "生成价格"
+
+msgctxt "field:ai.model.openrouter,context_length:"
+msgid "Context Length"
+msgstr "上下文长度"
+
+msgctxt "field:ai.model.openrouter,created:"
+msgid "Created"
+msgstr "创建时间"
+
+msgctxt "field:ai.model.openrouter,description:"
+msgid "Description"
+msgstr "描述"
+
+msgctxt "field:ai.model.openrouter,image_price:"
+msgid "Image Price"
+msgstr "图像价格"
+
+msgctxt "field:ai.model.openrouter,input_cache_read_price:"
+msgid "Input Cache Read Price"
+msgstr "输入缓存读取价格"
+
+msgctxt "field:ai.model.openrouter,input_cache_write_price:"
+msgid "Input Cache Write Price"
+msgstr "输入缓存写入价格"
+
+msgctxt "field:ai.model.openrouter,input_modalities:"
+msgid "Input Modalities"
+msgstr "输入模态"
+
+msgctxt "field:ai.model.openrouter,instruct_type:"
+msgid "Instruct Type"
+msgstr "指令类型"
+
+msgctxt "field:ai.model.openrouter,internal_reasoning_price:"
+msgid "Internal Reasoning Price"
+msgstr "内部推理价格"
+
+msgctxt "field:ai.model.openrouter,modality:"
+msgid "Modality"
+msgstr "模态"
+
+msgctxt "field:ai.model.openrouter,name:"
+msgid "Name"
+msgstr "名称"
+
+msgctxt "field:ai.model.openrouter,openrouter_id:"
+msgid "OpenRouter ID"
+msgstr "OpenRouter ID"
+
+msgctxt "field:ai.model.openrouter,output_modalities:"
+msgid "Output Modalities"
+msgstr "输出模态"
+
+msgctxt "field:ai.model.openrouter,per_request_limits:"
+msgid "Per Request Limits"
+msgstr "单次请求限制"
+
+msgctxt "field:ai.model.openrouter,prompt_price:"
+msgid "Prompt Price"
+msgstr "提示词价格"
+
+msgctxt "field:ai.model.openrouter,raw_data:"
+msgid "Raw Data"
+msgstr "原始数据"
+
+msgctxt "field:ai.model.openrouter,request_price:"
+msgid "Request Price"
+msgstr "请求价格"
+
+msgctxt "field:ai.model.openrouter,supported_parameters:"
+msgid "Supported Parameters"
+msgstr "支持的参数"
+
+msgctxt "field:ai.model.openrouter,tokenizer:"
+msgid "Tokenizer"
+msgstr "分词器"
+
+msgctxt "field:ai.model.openrouter,top_provider_context_length:"
+msgid "Top Provider Context Length"
+msgstr "首选提供商上下文长度"
+
+msgctxt "field:ai.model.openrouter,top_provider_is_moderated:"
+msgid "Top Provider Is Moderated"
+msgstr "首选提供商是否审核内容"
+
+msgctxt "field:ai.model.openrouter,top_provider_max_completion_tokens:"
+msgid "Top Provider Max Completion Tokens"
+msgstr "首选提供商最大生成词元数"
+
+msgctxt "field:ai.model.openrouter,web_search_price:"
+msgid "Web Search Price"
+msgstr "网络搜索价格"
+
+msgctxt "model:ir.action,name:act_ai_model"
+msgid "Models"
+msgstr "模型"
+
+msgctxt "model:ir.action,name:act_chat_instruction"
+msgid "Configuration"
+msgstr "设置"
+
+msgctxt "model:ir.action,name:act_openrouter_model"
+msgid "OpenRouter Models"
+msgstr "OpenRouter 模型"
+
+msgctxt "model:ir.message,text:msg_assistant_authentication_failed"
+msgid ""
+"Authentication with the AI service failed. Please check the API key "
+"configuration."
+msgstr "AI 服务身份验证失败。请检查 API 密钥配置。"
+
+msgctxt "model:ir.message,text:msg_assistant_no_response"
+msgid "AI server returned no response"
+msgstr "AI 服务器未返回响应"
+
+msgctxt "model:ir.message,text:msg_assistant_unreachable"
+msgid ""
+"The AI service is currently experiencing issues. Please try again in a few "
+"minutes."
+msgstr "AI 服务当前出现问题。请稍后重试。"
+
+msgctxt "model:ir.message,text:msg_openrouter_model_id_unique"
+msgid "The OpenRouter model identifier must be unique."
+msgstr "OpenRouter 模型标识必须唯一。"
+
+#, python-format
+msgctxt "model:ir.message,text:msg_openrouter_model_sync_error"
+msgid "There was an error syncing OpenRouter models: %(error)s"
+msgstr "同步 OpenRouter 模型时出错：%(error)s"
+
+msgctxt "model:ir.ui.menu,name:menu_ai_model"
+msgid "Models"
+msgstr "模型"
+
+msgctxt "model:ir.ui.menu,name:menu_instruction"
+msgid "Configuration"
+msgstr "设置"
+
+msgctxt "model:ir.ui.menu,name:menu_openrouter_model"
+msgid "OpenRouter Models"
+msgstr "OpenRouter 模型"
+
+msgctxt "model:ai.configuration,string:"
+msgid "Ai Configuration"
+msgstr "AI 配置"
+
+msgctxt "model:ai.model,string:"
+msgid "Ai Model"
+msgstr "AI 模型"
+
+msgctxt "model:ai.model.openrouter,string:"
+msgid "Ai Model Openrouter"
+msgstr "AI OpenRouter 模型"
+
+msgctxt "selection:ir.cron,method:"
+msgid "Sync OpenRouter Models"
+msgstr "同步 OpenRouter 模型"
+
+msgctxt "selection:ai.model,provider:"
+msgid "OpenAI"
+msgstr "OpenAI"
+
+msgctxt "selection:ai.model,provider:"
+msgid "OpenRouter"
+msgstr "OpenRouter"
+
+msgctxt "selection:ai.model,llm_pdf_engine:"
+msgid "Mistral OCR (best for scanned documents)"
+msgstr "Mistral OCR（最适合扫描文档）"
+
+msgctxt "selection:ai.model,llm_pdf_engine:"
+msgid "Native (best for born-digital PDFs)"
+msgstr "原生（最适合原生数字 PDF）"
+
+msgctxt "selection:ai.model,llm_pdf_engine:"
+msgid "PDF Text (balanced)"
+msgstr "PDF 文本（均衡）"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "High"
+msgstr "高"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "Low"
+msgstr "低"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "Medium"
+msgstr "中"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "None"
+msgstr "无"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "XHigh"
+msgstr "极高"
+
+msgctxt "selection:ai.model,type:"
+msgid "Embedding"
+msgstr "嵌入"
+
+msgctxt "selection:ai.model,type:"
+msgid "LLM"
+msgstr "大语言模型"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Architecture"
+msgstr "架构"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Pricing"
+msgstr "定价"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Token prices are shown per million tokens."
+msgstr "词元价格按每百万词元显示。"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Raw Data"
+msgstr "原始数据"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Top Provider"
+msgstr "首选提供商"
+
+msgctxt "field:ai.model.cost,cached_input_tokens:"
+msgid "Cached Input Tokens"
+msgstr "缓存输入词元数"
+
+msgctxt "field:ai.model.cost,cost:"
+msgid "Cost"
+msgstr "成本"
+
+msgctxt "field:ai.model.cost,currency:"
+msgid "Currency"
+msgstr "货币"
+
+msgctxt "field:ai.model.cost,duration:"
+msgid "Duration"
+msgstr "持续时间"
+
+msgctxt "field:ai.model.cost,input_tokens:"
+msgid "Input Tokens"
+msgstr "输入词元数"
+
+msgctxt "field:ai.model.cost,model:"
+msgid "Model"
+msgstr "模型"
+
+msgctxt "field:ai.model.cost,origin:"
+msgid "Origin"
+msgstr "依据"
+
+msgctxt "field:ai.model.cost,output_tokens:"
+msgid "Output Tokens"
+msgstr "输出词元数"
+
+msgctxt "model:ir.action,name:act_ai_model_cost"
+msgid "Costs"
+msgstr "费用"
+
+msgctxt "model:ir.message,text:msg_internal_server_error"
+msgid "Internal Server Error"
+msgstr "服务器内部错误"
+
+msgctxt "model:ir.ui.menu,name:menu_ai"
+msgid "AI"
+msgstr "AI"
+
+msgctxt "model:ir.ui.menu,name:menu_ai_model_cost"
+msgid "Costs"
+msgstr "费用"
