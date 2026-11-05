@@ -231,16 +231,16 @@ msgid "OpenRouter"
 msgstr "OpenRouter"
 
 msgctxt "selection:ai.model,llm_pdf_engine:"
-msgid "Mistral OCR (extracts text and images from the PDF)"
-msgstr "Mistral OCR (extreu text i imatges del PDF)"
+msgid "Mistral OCR (best for scanned documents)"
+msgstr "Mistral OCR (millor per a documents escanejats)"
 
 msgctxt "selection:ai.model,llm_pdf_engine:"
-msgid "Native (sends the PDF directly to the model)"
-msgstr "Native (envia el PDF directament al model)"
+msgid "Native (managed by the model)"
+msgstr "Natiu (gestionat pel model)"
 
 msgctxt "selection:ai.model,llm_pdf_engine:"
-msgid "PDF Text (converts the PDF to text)"
-msgstr "PDF Text (converteix el PDF en text)"
+msgid "PDF Text (converts PDF to markdown)"
+msgstr "Text PDF (passar PDF a markdown)"
 
 msgctxt "selection:ai.model,reasoning:"
 msgid "High"

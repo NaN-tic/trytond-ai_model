@@ -490,10 +490,12 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
             'invisible': Eval('type') != 'llm',
             }, depends=['type'])
     llm_pdf_engine = fields.Selection([
-            ('native', 'Native (sends the PDF directly to the model)'),
+            ('native', 'Native (managed by the model)'),
             ('mistral-ocr',
-                'Mistral OCR (extracts text and images from the PDF)'),
-            ('pdf-text', 'PDF Text (converts the PDF to text)'),
+                'Mistral OCR (best for scanned documents)'),
+            # OpenRouter has deprecated pdf-text but still accepts it
+            # because it redirects to cloudflare-ai.
+            ('pdf-text', 'PDF Text (converts PDF to markdown)'),
             ], 'LLM PDF Engine', required=True, sort=False, states={
                 'invisible': (
                     (Eval('type') != 'llm')
