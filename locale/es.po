@@ -243,15 +243,15 @@ msgstr "OpenRouter"
 
 msgctxt "selection:ai.model,llm_pdf_engine:"
 msgid "Mistral OCR (best for scanned documents)"
-msgstr "Mistral OCR (ideal para documentos escaneados)"
+msgstr "Mistral OCR (mejor para documentos escaneados)"
 
 msgctxt "selection:ai.model,llm_pdf_engine:"
-msgid "Native (best for born-digital PDFs)"
-msgstr "Nativo (ideal para PDFs digitales)"
+msgid "Native (managed by the model)"
+msgstr "Nativo (gestionado por el modelo)"
 
 msgctxt "selection:ai.model,llm_pdf_engine:"
-msgid "PDF Text (balanced)"
-msgstr "Texto PDF (equilibrado)"
+msgid "PDF Text (converts PDF to markdown)"
+msgstr "Texto PDF (pasar PDF a markdown)"
 
 msgctxt "selection:ai.model,reasoning:"
 msgid "High"

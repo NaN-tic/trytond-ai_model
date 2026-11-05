@@ -235,12 +235,12 @@ msgid "Mistral OCR (best for scanned documents)"
 msgstr "Mistral OCR (millor per a documents escanejats)"
 
 msgctxt "selection:ai.model,llm_pdf_engine:"
-msgid "Native (best for born-digital PDFs)"
-msgstr "Natiu (millor per a PDF digitals originals)"
+msgid "Native (managed by the model)"
+msgstr "Natiu (gestionat pel model)"
 
 msgctxt "selection:ai.model,llm_pdf_engine:"
-msgid "PDF Text (balanced)"
-msgstr "Text PDF (equilibrat)"
+msgid "PDF Text (converts PDF to markdown)"
+msgstr "Text PDF (passar PDF a markdown)"
 
 msgctxt "selection:ai.model,reasoning:"
 msgid "High"
