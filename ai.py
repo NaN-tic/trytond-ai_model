@@ -490,11 +490,11 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
             'invisible': Eval('type') != 'llm',
             }, depends=['type'])
     llm_pdf_engine = fields.Selection([
-            (None, ''),
-            ('mistral-ocr', 'Mistral OCR (best for scanned documents)'),
-            ('native', 'Native (best for born-digital PDFs)'),
-            ('pdf-text', 'PDF Text (balanced)'),
-            ], 'LLM PDF Engine', states={
+            ('native', 'Native (sends the PDF directly to the model)'),
+            ('mistral-ocr',
+                'Mistral OCR (extracts text and images from the PDF)'),
+            ('pdf-text', 'PDF Text (converts the PDF to text)'),
+            ], 'LLM PDF Engine', required=True, sort=False, states={
                 'invisible': (
                     (Eval('type') != 'llm')
                     | (Eval('provider') != 'openrouter')),
@@ -547,6 +547,10 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
     @staticmethod
     def default_allow_web_search():
         return 'prohibited'
+
+    @staticmethod
+    def default_llm_pdf_engine():
+        return 'native'
 
     @fields.depends(
         'type', 'provider', 'openrouter_model',

@@ -140,7 +140,7 @@ def get_completion(model, messages, origin, tools=None, tool_choice=None,
     if model.allow_web_search == 'native':
         model_kwargs['web_search_options'] = {}
 
-    if model.provider == 'openrouter' and model.llm_pdf_engine:
+    if model.provider == 'openrouter':
         has_file = any(
             isinstance(message, dict)
             and isinstance(message.get('content'), list)
@@ -157,7 +157,7 @@ def get_completion(model, messages, origin, tools=None, tool_choice=None,
                     for plugin in plugins):
                 plugins.append({
                         'id': 'file-parser',
-                        'pdf': {'engine': model.llm_pdf_engine},
+                        'pdf': {'engine': model.llm_pdf_engine or 'native'},
                         })
                 extra_body['plugins'] = plugins
 
