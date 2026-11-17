@@ -1,7 +1,10 @@
 import unittest
+from datetime import timedelta
 from types import SimpleNamespace
 from unittest.mock import patch
 
+from proteus import Model
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool
 from trytond.tests.test_tryton import DB_NAME, drop_db
 from trytond.tests.tools import activate_modules
@@ -20,6 +23,10 @@ class TestCostIndependentTransaction(unittest.TestCase):
 
     def test(self):
         activate_modules('ai_model')
+        ClientModel = Model.get('ai.model')
+        saved = ClientModel(name='Committed fallback',
+            model_name='cost/fallback', provider='openrouter', type='llm')
+        saved.save()
 
         with Transaction().start(DB_NAME, 1) as transaction:
             AIModel = Pool().get('ai.model')
@@ -94,10 +101,23 @@ class TestCostIndependentTransaction(unittest.TestCase):
             origin_reference = str(origin)
             # SQLite shares a connection between transactions. Simulate the
             # visibility of an uncommitted origin from a separate connection.
-            with patch.object(Action, 'search', return_value=[]):
+            search = Action.search
+
+            def hidden_search(domain, *args, **kwargs):
+                if kwargs.get('query'):
+                    return search([('id', '=', -1)], *args, **kwargs)
+                return []
+
+            with patch.object(Action, 'search', side_effect=hidden_search):
                 result, error = model.get_completion(
                     [{'role': 'user', 'content': 'Hello'}], origin,
-                    client=client)
+                    client=client, fallback_origin=model)
+                cost, = Cost.search([
+                    ('origin_reference', '=', origin_reference)])
+                self.assertEqual(cost.origin, model)
+                self.assertEqual(cost.fallback_origin, model)
+                self.assertEqual(Cost.search([('origin', '=', str(model))]),
+                    Cost.search([('fallback_origin', '=', str(model))]))
             self.assertFalse(error)
             self.assertIs(result, response)
             transaction.commit()
@@ -108,6 +128,11 @@ class TestCostIndependentTransaction(unittest.TestCase):
             cost_id = cost.id
             self.assertEqual(str(cost.origin), origin_reference)
             self.assertEqual(cost.input_tokens, 120)
+            self.assertFalse(Cost.search([('id', '=', cost_id),
+                ('origin', '=', str(model))]))
+            self.assertTrue(Cost.search([('id', '=', cost_id),
+                ('origin.rec_name', 'ilike', '%New cost origin%',
+                    'ir.action.act_window')]))
             # The independently saved cost must also remain readable when
             # its origin disappears, as after a caller rollback or deletion.
             Action.delete([cost.origin])
@@ -115,10 +140,82 @@ class TestCostIndependentTransaction(unittest.TestCase):
 
         with Transaction().start(DB_NAME, 1):
             cost = Pool().get('ai.model.cost')(cost_id)
-            self.assertIsNone(cost.origin)
+            model = Pool().get('ai.model')(model_id)
+            self.assertEqual(cost.origin, model)
+            self.assertEqual(cost.fallback_origin, model)
             self.assertEqual(cost.input_tokens, 120)
             table = cost.__table__()
             cursor = Transaction().connection.cursor()
-            cursor.execute(*table.select(table.origin,
+            cursor.execute(*table.select(table.origin_reference,
                     where=table.id == cost_id))
             self.assertEqual(cursor.fetchone()[0], origin_reference)
+
+            # Search the effective reference, including negation and rec_name.
+            for domain, expected in [
+                    ([('origin', '=', origin_reference)], False),
+                    ([('origin', '!=', origin_reference)], True),
+                    ([('origin', '=', str(model))], True),
+                    ([('origin', '!=', str(model))], False),
+                    ([('origin', 'in', [str(model)])], True),
+                    ([('origin', 'not in', [str(model)])], False),
+                    ([('origin', '=', None)], False),
+                    ([('origin', '!=', None)], True),
+                    ([('origin.rec_name', 'ilike', '%cost/model%',
+                        'ai.model')], True)]:
+                with self.subTest(domain=domain):
+                    self.assertEqual(bool(Cost.search(
+                        [('id', '=', cost_id)] + domain)), expected)
+
+            # Invalid model names and unallocated IDs fail before any API use.
+            with self.assertRaises(ValidationError):
+                model.get_completion([], Pool().get('ai.model')(),
+                    fallback_origin=model, client=client)
+            with patch.object(Cost, 'get_models',
+                    return_value=[('ai.model', 'Model')]):
+                with self.assertRaises(ValidationError):
+                    Cost.check_origin_reference(origin_reference)
+            for value in ('ai.model,None', 'ai.model,-1', 'ai.model,abc',
+                    'unknown.model,1'):
+                with self.subTest(reference=value):
+                    with self.assertRaises(ValidationError):
+                        Cost.check_origin_reference(value)
+
+            Action = Pool().get('ir.action.act_window')
+            new_origin, = Action.create([{
+                'name': 'Uncommitted fallback', 'res_model': 'ai.model'}])
+            with patch.object(Action, 'search', return_value=[]):
+                with self.assertRaisesRegex(ValueError, 'must be committed'):
+                    model.get_completion([], model,
+                        fallback_origin=new_origin, client=client)
+
+            # Both fields advertise exactly the same available models.
+            self.assertEqual(Cost.origin.selection, 'get_models')
+            self.assertEqual(Cost.fallback_origin.selection, 'get_models')
+
+
+        # Cost fields are readonly to clients; validate the internal create
+        # path, then inspect its outcome through Proteus.
+        values = {'model': saved.id,
+            'fallback_origin': 'ai.model,%s' % saved.id,
+            'duration': timedelta(seconds=1)}
+        with Transaction().start(DB_NAME, 1) as transaction:
+            Cost = Pool().get('ai.model.cost')
+            with self.assertRaisesRegex(ValidationError, 'Invalid AI cost origin'):
+                Cost.create([values | {'origin_reference': 'unknown.model,1'}])
+            transaction.rollback()
+        with Transaction().start(DB_NAME, 1) as transaction:
+            Cost = Pool().get('ai.model.cost')
+            missing, fallback_only = Cost.create([
+                values | {'origin_reference': 'ai.model,2147483647'}, values])
+            missing_id, fallback_only_id = missing.id, fallback_only.id
+            transaction.commit()
+        ClientCost = Model.get('ai.model.cost')
+        missing = ClientCost(missing_id)
+        self.assertEqual(missing.origin, saved)
+        self.assertEqual(ClientCost(fallback_only_id).origin, saved)
+        saved.active = False
+        saved.save()
+        missing.reload()
+        self.assertEqual(missing.origin, saved)
+        self.assertIn(missing, ClientCost.find([
+            ('origin', '=', 'ai.model,%s' % saved.id)]))
