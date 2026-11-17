@@ -2,6 +2,10 @@
 <form>
     <label name="origin"/>
     <field name="origin"/>
+    <label name="fallback_origin"/>
+    <field name="fallback_origin"/>
+    <label name="origin_reference"/>
+    <field name="origin_reference"/>
     <label name="model"/>
     <field name="model"/>
     <label name="input_tokens"/>
