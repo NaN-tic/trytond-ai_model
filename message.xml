@@ -18,5 +18,8 @@
         <record model="ir.message" id="msg_openrouter_model_sync_error">
             <field name="text">There was an error syncing OpenRouter models: %(error)s</field>
         </record>
+        <record model="ir.message" id="msg_invalid_cost_origin">
+            <field name="text">Invalid AI cost origin: %(origin)s. Use an allowed model and a saved record ID.</field>
+        </record>
     </data>
 </tryton>

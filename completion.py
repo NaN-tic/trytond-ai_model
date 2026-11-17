@@ -93,9 +93,26 @@ def get_completion_cost(response, model):
     return amount, currency
 
 
-def register_cost(response, model, origin, duration):
-    if not getattr(origin, 'id', None):
-        raise ValueError('The cost origin must be a saved record')
+def validate_cost_origins(origin, fallback_origin=None):
+    Cost = Pool().get('ai.model.cost')
+    reference = str(origin)
+    Cost.check_origin_reference(reference)
+    fallback_origin = fallback_origin if fallback_origin is not None else origin
+    fallback = str(fallback_origin)
+    Cost.check_origin_reference(fallback)
+    model_name, id_ = fallback.split(',')
+    # Check from a separate transaction before spending money. An ID allocated
+    # in the caller's transaction alone is not enough for a reliable fallback.
+    with Transaction().new_transaction(), without_check_access():
+        with Transaction().set_context(active_test=False):
+            Target = Pool().get(model_name)
+            if not Target.search([('id', '=', int(id_))], limit=1):
+                raise ValueError('The fallback cost origin must be committed')
+    return reference, fallback
+
+
+def register_cost(response, model, origin, duration, fallback_origin=None):
+    reference, fallback = validate_cost_origins(origin, fallback_origin)
     usage = _get_attr_or_key(response, 'usage')
     input_tokens, cached_tokens, output_tokens = _get_usage_tokens(usage)
     amount, currency = get_completion_cost(response, model)
@@ -106,7 +123,8 @@ def register_cost(response, model, origin, duration):
             amount = amount.quantize(Decimal(1) / 10 ** Cost.cost.digits[1])
         with without_check_access():
             Cost.create([{
-                        'origin': str(origin),
+                        'origin_reference': reference,
+                        'fallback_origin': fallback,
                         'model': model.id,
                         'input_tokens': input_tokens,
                         'cached_input_tokens': cached_tokens,
@@ -119,9 +137,8 @@ def register_cost(response, model, origin, duration):
 
 def get_completion(model, messages, origin, tools=None, tool_choice=None,
         user=None, client=None, response_format=None, extra_body=None,
-        store=None, max_tokens=None):
-    if not getattr(origin, 'id', None):
-        raise ValueError('get_completion origin must be a saved record')
+        store=None, max_tokens=None, fallback_origin=None):
+    validate_cost_origins(origin, fallback_origin)
     if model.type != 'llm':
         raise ValueError('get_completion requires an LLM model')
     client = client or model.get_client()
@@ -213,7 +230,8 @@ def get_completion(model, messages, origin, tools=None, tool_choice=None,
             '(provider=%s, model=%s).',
             duration, model.provider, model.model_name)
         logger.warning('AI completion response: %s', response)
-        register_cost(response, model, origin, duration)
+        register_cost(response, model, origin, duration,
+            fallback_origin=fallback_origin)
         if not response.choices:
             logger.warning('AI completion API call returned no choices.')
             if retry < 2:
@@ -228,9 +246,8 @@ def get_completion(model, messages, origin, tools=None, tool_choice=None,
 
 
 def get_embeddings(model, input_, origin, client=None,
-        encoding_format='float', dimensions=None):
-    if not getattr(origin, 'id', None):
-        raise ValueError('get_embeddings origin must be a saved record')
+        encoding_format='float', dimensions=None, fallback_origin=None):
+    validate_cost_origins(origin, fallback_origin)
     if model.type != 'embedding':
         raise ValueError('get_embeddings requires an embedding model')
     client = client or model.get_client()
@@ -250,5 +267,6 @@ def get_embeddings(model, input_, origin, client=None,
     logger.info(
         'AI embeddings API call finished in %s (model=%s).',
         duration, model.model_name)
-    register_cost(response, model, origin, duration)
+    register_cost(response, model, origin, duration,
+            fallback_origin=fallback_origin)
     return response

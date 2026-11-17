@@ -182,6 +182,7 @@ class TestCompletion(unittest.TestCase):
                         create=lambda **kwargs: (
                             request.update(kwargs) or response))))
 
+            Transaction().commit()
             result, error = ai_model.get_completion(
                 [{'role': 'user', 'content': [{
                                 'type': 'file',
