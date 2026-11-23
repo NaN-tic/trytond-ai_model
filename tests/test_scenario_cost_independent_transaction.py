@@ -104,7 +104,7 @@ class TestCostIndependentTransaction(unittest.TestCase):
             with patch.object(Action, 'search', return_value=[]):
                 result, error = model.get_completion(
                     [{'role': 'user', 'content': 'Hello'}], origin,
-                    client=client, fallback_origin=model)
+                    client=client, parent_origin=model)
                 cost, = Cost.search([
                     ('origin', '=', origin_reference)])
                 self.assertIsNone(cost.origin)
@@ -153,7 +153,7 @@ class TestCostIndependentTransaction(unittest.TestCase):
             # Invalid model names and unallocated IDs fail before any API use.
             with self.assertRaises(ValidationError):
                 model.get_completion([], Pool().get('ai.model')(),
-                    fallback_origin=model, client=client)
+                    parent_origin=model, client=client)
             with patch.object(Cost, 'get_models',
                     return_value=[('ai.model', 'Model')]):
                 with self.assertRaises(ValidationError):
@@ -170,7 +170,7 @@ class TestCostIndependentTransaction(unittest.TestCase):
             with patch.object(Action, 'search', return_value=[]):
                 with self.assertRaisesRegex(ValueError, 'must be committed'):
                     model.get_completion([], model,
-                        fallback_origin=new_origin, client=client)
+                        parent_origin=new_origin, client=client)
 
         # Cost fields are readonly to clients; validate the internal create
         # path, then inspect its outcome through Proteus.
