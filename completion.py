@@ -124,7 +124,7 @@ def register_cost(response, model, origin, duration, fallback_origin=None):
         with without_check_access():
             Cost.create([{
                         'origin_reference': reference,
-                        'fallback_origin': fallback,
+                        'parent_origin': fallback,
                         'model': model.id,
                         'input_tokens': input_tokens,
                         'cached_input_tokens': cached_tokens,
