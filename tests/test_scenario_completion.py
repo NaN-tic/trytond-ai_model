@@ -198,7 +198,7 @@ class TestCompletion(unittest.TestCase):
             self.assertIs(result, response)
             self.assertIs(result.usage, usage)
             cost, = Cost.search([])
-            self.assertEqual(cost.origin, ai_model)
+            self.assertEqual(cost.origin, str(ai_model))
             self.assertEqual(cost.model, ai_model)
             self.assertEqual(cost.input_tokens, 120)
             self.assertEqual(cost.cached_input_tokens, 20)
@@ -308,7 +308,7 @@ class TestCompletion(unittest.TestCase):
             embedding_cost, = Cost.search([
                     ('model', '=', embedding_model.id),
                     ])
-            self.assertEqual(embedding_cost.origin, ai_model)
+            self.assertEqual(embedding_cost.origin, str(ai_model))
             self.assertEqual(embedding_cost.input_tokens, 12)
             self.assertEqual(embedding_cost.cost, Decimal('0.00003000'))
             self.assertGreaterEqual(

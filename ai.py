@@ -1,11 +1,10 @@
 import json
+import re
 from decimal import Decimal
 
 import requests
 from openai import OpenAI
-from sql import Cast, Column, Literal, Null, Table
-from sql.conditionals import Case
-from sql.functions import Position, Substring
+from sql import Cast, Table
 from sql.operators import Concat, Exists
 from trytond import backend
 import trytond.config as config_
@@ -695,12 +694,11 @@ class AIModelCost(ModelSQL, ModelView):
     'AI Model Cost'
     __name__ = 'ai.model.cost'
 
-    origin = fields.Function(fields.Reference(
-            'Origin', selection='get_models'), 'get_origin',
-        searcher='search_origin')
+    origin = fields.Function(
+        fields.Char('Origin'), 'get_origin', searcher='search_origin')
     origin_reference = fields.Char('Origin Reference', readonly=True)
-    fallback_origin = fields.Reference(
-        'Fallback Origin', selection='get_models', required=True, readonly=True)
+    parent_origin = fields.Reference(
+        'Parent Origin', selection='get_models', required=True, readonly=True)
     model = fields.Many2One(
         'ai.model', 'Model', required=True, readonly=True,
         ondelete='RESTRICT')
@@ -715,14 +713,16 @@ class AIModelCost(ModelSQL, ModelView):
     @classmethod
     def __register__(cls, module_name):
         handler = cls.__table_handler__(module_name)
+        if handler.column_exist('fallback_origin'):
+            handler.column_rename('fallback_origin', 'parent_origin')
         if handler.column_exist('origin'):
             handler.column_rename('origin', 'origin_reference')
-            handler.add_column('fallback_origin', 'VARCHAR')
+            handler.add_column('parent_origin', 'VARCHAR')
             table = cls.__table__()
             # Old references may already be dangling. The AI model is stored
-            # with a foreign key and provides a reliable fallback for them.
+            # with a foreign key and provides a parent for these costs.
             cursor = Transaction().connection.cursor()
-            cursor.execute(*table.update([table.fallback_origin], [
+            cursor.execute(*table.update([table.parent_origin], [
                 Concat('ai.model,', Cast(table.model, 'VARCHAR'))]))
         super().__register__(module_name)
 
@@ -760,51 +760,19 @@ class AIModelCost(ModelSQL, ModelView):
 
     @classmethod
     def get_origin(cls, records, name):
-        field = cls._fields['origin']._field
-        ids = [r.id for r in records]
-        values = [{'id': r.id, name: r.origin_reference} for r in records]
-        origins = field.get(ids, cls, name, values=values)
-        return {r.id: origins.get(r.id) or (
-                str(r.fallback_origin) if r.fallback_origin else None)
-            for r in records}
-
-    @classmethod
-    def origin_sql(cls, table):
-        # Restrict the existence checks to models actually used by costs.
-        # Compare complete references, avoiding casts of arbitrary Char data.
-        cursor = Transaction().connection.cursor()
-        names = set()
-        for column in (table.origin_reference, table.fallback_origin):
-            cursor.execute(*table.select(
-                Substring(column, 1, Position(',', column) - 1),
-                where=column != Null, distinct=True))
-            names.update(row[0] for row in cursor)
-        allowed = dict(cls.get_models())
-        exists = [Literal(False), Literal(False)]
-        with Transaction().set_context(active_test=False), without_check_access():
-            for name in sorted(names):
-                if name not in allowed or not name:
-                    continue
-                Target = Pool().get(name)
-                query = Target.search([], order=[], query=True)
-                reference = Concat(name + ',', Cast(
-                    Column(query, 'id'), 'VARCHAR'))
-                for index, column in enumerate(
-                        (table.origin_reference, table.fallback_origin)):
-                    exists[index] |= Exists(query.select(
-                        Literal(1), where=reference == column))
-        return Case(
-            (exists[0], table.origin_reference),
-            (exists[1], table.fallback_origin), else_=Null)
+        ids = [record.id for record in records]
+        values = []
+        for record in records:
+            reference = record.origin_reference
+            # Legacy values may include unsaved or malformed references.
+            if reference and re.fullmatch(r'[^,]+,(0|[1-9][0-9]*)', reference):
+                values.append({'id': record.id, name: reference})
+        origins = cls.parent_origin.get(ids, cls, name, values=values)
+        return {id_: origins.get(id_) for id_ in ids}
 
     @classmethod
     def search_origin(cls, name, clause):
-        table = cls.__table__()
-        query = table.select(table.id, cls.origin_sql(table).as_('origin'))
-        expression = cls._fields['origin']._field.convert_domain(
-            clause, {None: (query, None)}, cls)
-        return [('id', 'in', query.select(Column(query, 'id'),
-            where=expression))]
+        return [('origin_reference', *clause[1:])]
 
 
 class AIConfiguration(ModelSingleton, ModelSQL, ModelView):
