@@ -1,0 +1,342 @@
+#
+msgid ""
+msgstr ""
+"Language: km\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "field:ai.configuration,default_llm:"
+msgid "Default LLM"
+msgstr "ម៉ូដែល LLM លំនាំដើម"
+
+msgctxt "field:ai.configuration,default_embedding_model:"
+msgid "Default Embedding"
+msgstr "ម៉ូដែលបង្កប់វ៉ិចទ័រលំនាំដើម"
+
+msgctxt "field:ai.model,allow_web_search:"
+msgid "Web Search"
+msgstr "ការស្វែងរកតាមបណ្ដាញ"
+
+msgctxt "selection:ai.model,allow_web_search:"
+msgid "Native"
+msgstr "មានស្រាប់ក្នុងម៉ូដែល"
+
+msgctxt "selection:ai.model,allow_web_search:"
+msgid "Prohibited"
+msgstr "ហាមឃាត់"
+
+msgctxt "field:ai.model,llm_pdf_engine:"
+msgid "LLM PDF Engine"
+msgstr "កម្មវិធីដំណើរការ PDF សម្រាប់ LLM"
+
+msgctxt "field:ai.model,model_name:"
+msgid "Model Name"
+msgstr "ឈ្មោះម៉ូដែល"
+
+msgctxt "field:ai.model,name:"
+msgid "Name"
+msgstr "ឈ្មោះ"
+
+msgctxt "field:ai.model,openrouter_model:"
+msgid "OpenRouter Model"
+msgstr "ម៉ូដែល OpenRouter"
+
+msgctxt "field:ai.model,provider:"
+msgid "Provider"
+msgstr "អ្នកផ្ដល់សេវា"
+
+msgctxt "field:ai.model,reasoning:"
+msgid "Reasoning"
+msgstr "ការវែកញែក"
+
+msgctxt "field:ai.model,supports_reasoning:"
+msgid "Supports Reasoning"
+msgstr "គាំទ្រការវែកញែក"
+
+msgctxt "field:ai.model,supports_web_search:"
+msgid "Supports Web Search"
+msgstr "គាំទ្រការស្វែងរកតាមបណ្ដាញ"
+
+msgctxt "field:ai.model,type:"
+msgid "Type"
+msgstr "ប្រភេទ"
+
+msgctxt "field:ai.model.openrouter,completion_price:"
+msgid "Completion Price"
+msgstr "តម្លៃនៃការបង្កើតចម្លើយ"
+
+msgctxt "field:ai.model.openrouter,context_length:"
+msgid "Context Length"
+msgstr "ប្រវែងបរិបទ"
+
+msgctxt "field:ai.model.openrouter,created:"
+msgid "Created"
+msgstr "បានបង្កើត"
+
+msgctxt "field:ai.model.openrouter,description:"
+msgid "Description"
+msgstr "សេចក្តីពិពណ៌នា"
+
+msgctxt "field:ai.model.openrouter,image_price:"
+msgid "Image Price"
+msgstr "តម្លៃរូបភាព"
+
+msgctxt "field:ai.model.openrouter,input_cache_read_price:"
+msgid "Input Cache Read Price"
+msgstr "តម្លៃអានទិន្នន័យបញ្ចូលពីឃ្លាំងបណ្ដោះអាសន្ន"
+
+msgctxt "field:ai.model.openrouter,input_cache_write_price:"
+msgid "Input Cache Write Price"
+msgstr "តម្លៃសរសេរទិន្នន័យបញ្ចូលទៅឃ្លាំងបណ្ដោះអាសន្ន"
+
+msgctxt "field:ai.model.openrouter,input_modalities:"
+msgid "Input Modalities"
+msgstr "ប្រភេទទិន្នន័យបញ្ចូល"
+
+msgctxt "field:ai.model.openrouter,instruct_type:"
+msgid "Instruct Type"
+msgstr "ប្រភេទសេចក្តីណែនាំ"
+
+msgctxt "field:ai.model.openrouter,internal_reasoning_price:"
+msgid "Internal Reasoning Price"
+msgstr "តម្លៃនៃការវែកញែកផ្ទៃក្នុង"
+
+msgctxt "field:ai.model.openrouter,modality:"
+msgid "Modality"
+msgstr "ប្រភេទទិន្នន័យ"
+
+msgctxt "field:ai.model.openrouter,name:"
+msgid "Name"
+msgstr "ឈ្មោះ"
+
+msgctxt "field:ai.model.openrouter,openrouter_id:"
+msgid "OpenRouter ID"
+msgstr "លេខសម្គាល់ OpenRouter"
+
+msgctxt "field:ai.model.openrouter,output_modalities:"
+msgid "Output Modalities"
+msgstr "ប្រភេទទិន្នន័យលទ្ធផល"
+
+msgctxt "field:ai.model.openrouter,per_request_limits:"
+msgid "Per Request Limits"
+msgstr "ដែនកំណត់ក្នុងមួយសំណើ"
+
+msgctxt "field:ai.model.openrouter,prompt_price:"
+msgid "Prompt Price"
+msgstr "តម្លៃទិន្នន័យបញ្ចូល"
+
+msgctxt "field:ai.model.openrouter,raw_data:"
+msgid "Raw Data"
+msgstr "ទិន្នន័យដើម"
+
+msgctxt "field:ai.model.openrouter,request_price:"
+msgid "Request Price"
+msgstr "តម្លៃក្នុងមួយសំណើ"
+
+msgctxt "field:ai.model.openrouter,supported_parameters:"
+msgid "Supported Parameters"
+msgstr "ប៉ារ៉ាម៉ែត្រដែលគាំទ្រ"
+
+msgctxt "field:ai.model.openrouter,tokenizer:"
+msgid "Tokenizer"
+msgstr "កម្មវិធីបំបែកថូខិន"
+
+msgctxt "field:ai.model.openrouter,top_provider_context_length:"
+msgid "Top Provider Context Length"
+msgstr "ប្រវែងបរិបទរបស់អ្នកផ្ដល់សេវាចម្បង"
+
+msgctxt "field:ai.model.openrouter,top_provider_is_moderated:"
+msgid "Top Provider Is Moderated"
+msgstr "អ្នកផ្ដល់សេវាចម្បងត្រួតពិនិត្យមាតិកា"
+
+msgctxt "field:ai.model.openrouter,top_provider_max_completion_tokens:"
+msgid "Top Provider Max Completion Tokens"
+msgstr "ចំនួនថូខិនលទ្ធផលអតិបរមារបស់អ្នកផ្ដល់សេវាចម្បង"
+
+msgctxt "field:ai.model.openrouter,web_search_price:"
+msgid "Web Search Price"
+msgstr "តម្លៃការស្វែងរកតាមបណ្ដាញ"
+
+msgctxt "model:ir.action,name:act_ai_model"
+msgid "Models"
+msgstr "ម៉ូដែល"
+
+msgctxt "model:ir.action,name:act_chat_instruction"
+msgid "Configuration"
+msgstr "ការកំណត់រចនាសម្ព័ន្ធ"
+
+msgctxt "model:ir.action,name:act_openrouter_model"
+msgid "OpenRouter Models"
+msgstr "ម៉ូដែល OpenRouter"
+
+msgctxt "model:ir.message,text:msg_assistant_authentication_failed"
+msgid ""
+"Authentication with the AI service failed. Please check the API key "
+"configuration."
+msgstr ""
+"ការផ្ទៀងផ្ទាត់អត្តសញ្ញាណជាមួយសេវា AI បានបរាជ័យ។ សូមពិនិត្យការកំណត់កូនសោ API។"
+
+msgctxt "model:ir.message,text:msg_assistant_no_response"
+msgid "AI server returned no response"
+msgstr "ម៉ាស៊ីនមេ AI មិនបានផ្ដល់ចម្លើយទេ"
+
+msgctxt "model:ir.message,text:msg_assistant_unreachable"
+msgid ""
+"The AI service is currently experiencing issues. Please try again in a few "
+"minutes."
+msgstr "សេវា AI កំពុងមានបញ្ហា។ សូមព្យាយាមម្តងទៀតបន្ទាប់ពីពីរបីនាទី។"
+
+msgctxt "model:ir.message,text:msg_openrouter_model_id_unique"
+msgid "The OpenRouter model identifier must be unique."
+msgstr "លេខសម្គាល់ម៉ូដែល OpenRouter ត្រូវមានតែមួយគត់។"
+
+#, python-format
+msgctxt "model:ir.message,text:msg_openrouter_model_sync_error"
+msgid "There was an error syncing OpenRouter models: %(error)s"
+msgstr "មានកំហុសពេលធ្វើសមកាលកម្មម៉ូដែល OpenRouter៖ %(error)s"
+
+msgctxt "model:ir.ui.menu,name:menu_ai_model"
+msgid "Models"
+msgstr "ម៉ូដែល"
+
+msgctxt "model:ir.ui.menu,name:menu_instruction"
+msgid "Configuration"
+msgstr "ការកំណត់រចនាសម្ព័ន្ធ"
+
+msgctxt "model:ir.ui.menu,name:menu_openrouter_model"
+msgid "OpenRouter Models"
+msgstr "ម៉ូដែល OpenRouter"
+
+msgctxt "model:ai.configuration,string:"
+msgid "Ai Configuration"
+msgstr "ការកំណត់បញ្ញាសិប្បនិម្មិត"
+
+msgctxt "model:ai.model,string:"
+msgid "Ai Model"
+msgstr "ម៉ូដែលបញ្ញាសិប្បនិម្មិត"
+
+msgctxt "model:ai.model.openrouter,string:"
+msgid "Ai Model Openrouter"
+msgstr "ម៉ូដែលបញ្ញាសិប្បនិម្មិត OpenRouter"
+
+msgctxt "selection:ir.cron,method:"
+msgid "Sync OpenRouter Models"
+msgstr "ធ្វើសមកាលកម្មម៉ូដែល OpenRouter"
+
+msgctxt "selection:ai.model,provider:"
+msgid "OpenAI"
+msgstr "OpenAI"
+
+msgctxt "selection:ai.model,provider:"
+msgid "OpenRouter"
+msgstr "OpenRouter"
+
+msgctxt "selection:ai.model,llm_pdf_engine:"
+msgid "Mistral OCR (best for scanned documents)"
+msgstr "Mistral OCR (សមស្របបំផុតសម្រាប់ឯកសារដែលបានស្កេន)"
+
+msgctxt "selection:ai.model,llm_pdf_engine:"
+msgid "Native (best for born-digital PDFs)"
+msgstr "មានស្រាប់ក្នុងម៉ូដែល (សមស្របបំផុតសម្រាប់ PDF ដែលបានបង្កើតជាឌីជីថល)"
+
+msgctxt "selection:ai.model,llm_pdf_engine:"
+msgid "PDF Text (balanced)"
+msgstr "អត្ថបទ PDF (មានតុល្យភាព)"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "High"
+msgstr "ខ្ពស់"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "Low"
+msgstr "ទាប"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "Medium"
+msgstr "មធ្យម"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "None"
+msgstr "គ្មាន"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "XHigh"
+msgstr "ខ្ពស់បំផុត"
+
+msgctxt "selection:ai.model,type:"
+msgid "Embedding"
+msgstr "ការបង្កប់វ៉ិចទ័រ"
+
+msgctxt "selection:ai.model,type:"
+msgid "LLM"
+msgstr "LLM"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Architecture"
+msgstr "ស្ថាបត្យកម្ម"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Pricing"
+msgstr "តម្លៃ"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Token prices are shown per million tokens."
+msgstr "តម្លៃថូខិនគិតក្នុងមួយលានថូខិន។"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Raw Data"
+msgstr "ទិន្នន័យដើម"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Top Provider"
+msgstr "អ្នកផ្ដល់សេវាចម្បង"
+
+msgctxt "field:ai.model.cost,cached_input_tokens:"
+msgid "Cached Input Tokens"
+msgstr "ថូខិនបញ្ចូលដែលបានផ្ទុកក្នុងឃ្លាំងបណ្ដោះអាសន្ន"
+
+msgctxt "field:ai.model.cost,cost:"
+msgid "Cost"
+msgstr "ថ្លៃដើម"
+
+msgctxt "field:ai.model.cost,currency:"
+msgid "Currency"
+msgstr "រូបិយប័ណ្ណ"
+
+msgctxt "field:ai.model.cost,duration:"
+msgid "Duration"
+msgstr "រយៈពេល"
+
+msgctxt "field:ai.model.cost,input_tokens:"
+msgid "Input Tokens"
+msgstr "ថូខិនបញ្ចូល"
+
+msgctxt "field:ai.model.cost,model:"
+msgid "Model"
+msgstr "ម៉ូដែល"
+
+msgctxt "field:ai.model.cost,origin:"
+msgid "Origin"
+msgstr "ប្រភពដើម"
+
+msgctxt "field:ai.model.cost,output_tokens:"
+msgid "Output Tokens"
+msgstr "ថូខិនលទ្ធផល"
+
+msgctxt "model:ir.action,name:act_ai_model_cost"
+msgid "Costs"
+msgstr "ថ្លៃដើម"
+
+msgctxt "model:ir.message,text:msg_internal_server_error"
+msgid "Internal Server Error"
+msgstr "កំហុសផ្ទៃក្នុងម៉ាស៊ីនមេ"
+
+msgctxt "model:ir.ui.menu,name:menu_ai"
+msgid "AI"
+msgstr "AI"
+
+msgctxt "model:ir.ui.menu,name:menu_ai_model_cost"
+msgid "Costs"
+msgstr "ថ្លៃដើម"
