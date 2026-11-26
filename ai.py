@@ -298,10 +298,7 @@ class OpenRouterModel(DeactivableMixin, ModelSQL, ModelView):
         'Top Provider Context Length', readonly=True)
     top_provider_max_completion_tokens = fields.Integer(
         'Top Provider Max Completion Tokens', readonly=True)
-    internal_max_prompt_tokens = fields.Integer(
-        'Reported Max Prompt Tokens', readonly=True)
-    max_prompt_tokens = fields.Function(
-        fields.Integer('Max Prompt Tokens'), 'get_max_prompt_tokens')
+    max_prompt_tokens = fields.Integer('Max Prompt Tokens', readonly=True)
     top_provider_is_moderated = fields.Boolean(
         'Top Provider Is Moderated', readonly=True)
     per_request_limits = fields.Text('Per Request Limits', readonly=True)
@@ -338,17 +335,6 @@ class OpenRouterModel(DeactivableMixin, ModelSQL, ModelView):
         return min(filter(None, (
                     self.context_length, self.top_provider_context_length)),
             default=None)
-
-    def get_max_prompt_tokens(self, name):
-        if self.internal_max_prompt_tokens:
-            return self.internal_max_prompt_tokens
-
-        context_length = self.context_limit
-        completion_limit = self.top_provider_max_completion_tokens
-        if (context_length and completion_limit
-                and 0 < completion_limit < context_length):
-            return context_length - completion_limit
-        return None
 
     @classmethod
     def search_rec_name(cls, name, clause):
@@ -484,7 +470,7 @@ class OpenRouterModel(DeactivableMixin, ModelSQL, ModelView):
                 continue
             values = cls._values_from_payload(model)
             openrouter_id = values['openrouter_id']
-            values['internal_max_prompt_tokens'] = prompt_limits.get(openrouter_id, 0)
+            values['max_prompt_tokens'] = prompt_limits.get(openrouter_id)
             seen.add(openrouter_id)
             existing_model = existing.get(openrouter_id)
             if existing_model:
