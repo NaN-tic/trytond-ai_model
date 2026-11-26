@@ -1,0 +1,345 @@
+#
+msgid ""
+msgstr ""
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "field:ai.configuration,default_llm:"
+msgid "Default LLM"
+msgstr "Alapértelmezett LLM"
+
+msgctxt "field:ai.configuration,default_embedding_model:"
+msgid "Default Embedding"
+msgstr "Alapértelmezett beágyazási modell"
+
+msgctxt "field:ai.model,allow_web_search:"
+msgid "Web Search"
+msgstr "Webes keresés"
+
+msgctxt "selection:ai.model,allow_web_search:"
+msgid "Native"
+msgstr "Natív"
+
+msgctxt "selection:ai.model,allow_web_search:"
+msgid "Prohibited"
+msgstr "Tiltott"
+
+msgctxt "field:ai.model,llm_pdf_engine:"
+msgid "LLM PDF Engine"
+msgstr "LLM PDF-feldolgozó"
+
+msgctxt "field:ai.model,model_name:"
+msgid "Model Name"
+msgstr "Mintanév"
+
+msgctxt "field:ai.model,name:"
+msgid "Name"
+msgstr "Név"
+
+msgctxt "field:ai.model,openrouter_model:"
+msgid "OpenRouter Model"
+msgstr "OpenRouter-modell"
+
+msgctxt "field:ai.model,provider:"
+msgid "Provider"
+msgstr "Szolgáltató"
+
+msgctxt "field:ai.model,reasoning:"
+msgid "Reasoning"
+msgstr "Következtetés"
+
+msgctxt "field:ai.model,supports_reasoning:"
+msgid "Supports Reasoning"
+msgstr "Következtetés támogatása"
+
+msgctxt "field:ai.model,supports_web_search:"
+msgid "Supports Web Search"
+msgstr "Webes keresés támogatása"
+
+msgctxt "field:ai.model,type:"
+msgid "Type"
+msgstr "Típus"
+
+msgctxt "field:ai.model.openrouter,completion_price:"
+msgid "Completion Price"
+msgstr "Kimenet ára"
+
+msgctxt "field:ai.model.openrouter,context_length:"
+msgid "Context Length"
+msgstr "Kontextus hossza"
+
+msgctxt "field:ai.model.openrouter,created:"
+msgid "Created"
+msgstr "Létrehozva"
+
+msgctxt "field:ai.model.openrouter,description:"
+msgid "Description"
+msgstr "Leírás"
+
+msgctxt "field:ai.model.openrouter,image_price:"
+msgid "Image Price"
+msgstr "Kép ára"
+
+msgctxt "field:ai.model.openrouter,input_cache_read_price:"
+msgid "Input Cache Read Price"
+msgstr "Bemeneti gyorsítótár olvasásának ára"
+
+msgctxt "field:ai.model.openrouter,input_cache_write_price:"
+msgid "Input Cache Write Price"
+msgstr "Bemeneti gyorsítótár írásának ára"
+
+msgctxt "field:ai.model.openrouter,input_modalities:"
+msgid "Input Modalities"
+msgstr "Bemeneti modalitások"
+
+msgctxt "field:ai.model.openrouter,instruct_type:"
+msgid "Instruct Type"
+msgstr "Utasítás típusa"
+
+msgctxt "field:ai.model.openrouter,internal_reasoning_price:"
+msgid "Internal Reasoning Price"
+msgstr "Belső következtetés ára"
+
+msgctxt "field:ai.model.openrouter,modality:"
+msgid "Modality"
+msgstr "Modalitás"
+
+msgctxt "field:ai.model.openrouter,name:"
+msgid "Name"
+msgstr "Név"
+
+msgctxt "field:ai.model.openrouter,openrouter_id:"
+msgid "OpenRouter ID"
+msgstr "OpenRouter-azonosító"
+
+msgctxt "field:ai.model.openrouter,output_modalities:"
+msgid "Output Modalities"
+msgstr "Kimeneti modalitások"
+
+msgctxt "field:ai.model.openrouter,per_request_limits:"
+msgid "Per Request Limits"
+msgstr "Kérésenkénti korlátok"
+
+msgctxt "field:ai.model.openrouter,prompt_price:"
+msgid "Prompt Price"
+msgstr "Prompt ára"
+
+msgctxt "field:ai.model.openrouter,raw_data:"
+msgid "Raw Data"
+msgstr "Nyers adatok"
+
+msgctxt "field:ai.model.openrouter,request_price:"
+msgid "Request Price"
+msgstr "Kérés ára"
+
+msgctxt "field:ai.model.openrouter,supported_parameters:"
+msgid "Supported Parameters"
+msgstr "Támogatott paraméterek"
+
+msgctxt "field:ai.model.openrouter,tokenizer:"
+msgid "Tokenizer"
+msgstr "Tokenizáló"
+
+msgctxt "field:ai.model.openrouter,top_provider_context_length:"
+msgid "Top Provider Context Length"
+msgstr "Elsődleges szolgáltató kontextushossza"
+
+msgctxt "field:ai.model.openrouter,top_provider_is_moderated:"
+msgid "Top Provider Is Moderated"
+msgstr "Elsődleges szolgáltató moderált"
+
+msgctxt "field:ai.model.openrouter,top_provider_max_completion_tokens:"
+msgid "Top Provider Max Completion Tokens"
+msgstr "Elsődleges szolgáltató maximális kimeneti tokenszáma"
+
+msgctxt "field:ai.model.openrouter,web_search_price:"
+msgid "Web Search Price"
+msgstr "Webes keresés ára"
+
+msgctxt "model:ir.action,name:act_ai_model"
+msgid "Models"
+msgstr "Modellek"
+
+msgctxt "model:ir.action,name:act_chat_instruction"
+msgid "Configuration"
+msgstr "Beállítások"
+
+msgctxt "model:ir.action,name:act_openrouter_model"
+msgid "OpenRouter Models"
+msgstr "OpenRouter-modellek"
+
+msgctxt "model:ir.message,text:msg_assistant_authentication_failed"
+msgid ""
+"Authentication with the AI service failed. Please check the API key "
+"configuration."
+msgstr ""
+"Az AI-szolgáltatás hitelesítése sikertelen. Ellenőrizze az API-kulcs "
+"beállítását."
+
+msgctxt "model:ir.message,text:msg_assistant_no_response"
+msgid "AI server returned no response"
+msgstr "Az AI-kiszolgáló nem adott választ"
+
+msgctxt "model:ir.message,text:msg_assistant_unreachable"
+msgid ""
+"The AI service is currently experiencing issues. Please try again in a few "
+"minutes."
+msgstr ""
+"Az AI-szolgáltatás jelenleg hibásan működik. Próbálja újra néhány perc "
+"múlva."
+
+msgctxt "model:ir.message,text:msg_openrouter_model_id_unique"
+msgid "The OpenRouter model identifier must be unique."
+msgstr "Az OpenRouter-modell azonosítójának egyedinek kell lennie."
+
+#, python-format
+msgctxt "model:ir.message,text:msg_openrouter_model_sync_error"
+msgid "There was an error syncing OpenRouter models: %(error)s"
+msgstr "Hiba történt az OpenRouter-modellek szinkronizálásakor: %(error)s"
+
+msgctxt "model:ir.ui.menu,name:menu_ai_model"
+msgid "Models"
+msgstr "Modellek"
+
+msgctxt "model:ir.ui.menu,name:menu_instruction"
+msgid "Configuration"
+msgstr "Beállítások"
+
+msgctxt "model:ir.ui.menu,name:menu_openrouter_model"
+msgid "OpenRouter Models"
+msgstr "OpenRouter-modellek"
+
+msgctxt "model:ai.configuration,string:"
+msgid "Ai Configuration"
+msgstr "AI-beállítások"
+
+msgctxt "model:ai.model,string:"
+msgid "Ai Model"
+msgstr "AI-modell"
+
+msgctxt "model:ai.model.openrouter,string:"
+msgid "Ai Model Openrouter"
+msgstr "OpenRouter AI-modell"
+
+msgctxt "selection:ir.cron,method:"
+msgid "Sync OpenRouter Models"
+msgstr "OpenRouter-modellek szinkronizálása"
+
+msgctxt "selection:ai.model,provider:"
+msgid "OpenAI"
+msgstr "OpenAI"
+
+msgctxt "selection:ai.model,provider:"
+msgid "OpenRouter"
+msgstr "OpenRouter"
+
+msgctxt "selection:ai.model,llm_pdf_engine:"
+msgid "Mistral OCR (best for scanned documents)"
+msgstr "Mistral OCR (szkennelt dokumentumokhoz a legjobb)"
+
+msgctxt "selection:ai.model,llm_pdf_engine:"
+msgid "Native (best for born-digital PDFs)"
+msgstr "Natív (eredetileg digitális PDF-ekhez a legjobb)"
+
+msgctxt "selection:ai.model,llm_pdf_engine:"
+msgid "PDF Text (balanced)"
+msgstr "PDF-szöveg (kiegyensúlyozott)"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "High"
+msgstr "Magas"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "Low"
+msgstr "Alacsony"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "Medium"
+msgstr "Közepes"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "None"
+msgstr "nincs"
+
+msgctxt "selection:ai.model,reasoning:"
+msgid "XHigh"
+msgstr "Nagyon magas"
+
+msgctxt "selection:ai.model,type:"
+msgid "Embedding"
+msgstr "Beágyazás"
+
+msgctxt "selection:ai.model,type:"
+msgid "LLM"
+msgstr "LLM"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Architecture"
+msgstr "Architektúra"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Pricing"
+msgstr "Árazás"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Token prices are shown per million tokens."
+msgstr "A tokenárak egymillió tokenre vonatkoznak."
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Raw Data"
+msgstr "Nyers adatok"
+
+msgctxt "view:ai.model.openrouter:"
+msgid "Top Provider"
+msgstr "Elsődleges szolgáltató"
+
+msgctxt "field:ai.model.cost,cached_input_tokens:"
+msgid "Cached Input Tokens"
+msgstr "Gyorsítótárazott bemeneti tokenek"
+
+msgctxt "field:ai.model.cost,cost:"
+msgid "Cost"
+msgstr "Költség"
+
+msgctxt "field:ai.model.cost,currency:"
+msgid "Currency"
+msgstr "Pénznem"
+
+msgctxt "field:ai.model.cost,duration:"
+msgid "Duration"
+msgstr "Időtartam"
+
+msgctxt "field:ai.model.cost,input_tokens:"
+msgid "Input Tokens"
+msgstr "Bemeneti tokenek"
+
+msgctxt "field:ai.model.cost,model:"
+msgid "Model"
+msgstr "Minta"
+
+msgctxt "field:ai.model.cost,origin:"
+msgid "Origin"
+msgstr "Eredet"
+
+msgctxt "field:ai.model.cost,output_tokens:"
+msgid "Output Tokens"
+msgstr "Kimeneti tokenek"
+
+msgctxt "model:ir.action,name:act_ai_model_cost"
+msgid "Costs"
+msgstr "Költségek"
+
+msgctxt "model:ir.message,text:msg_internal_server_error"
+msgid "Internal Server Error"
+msgstr "Belső kiszolgálóhiba"
+
+msgctxt "model:ir.ui.menu,name:menu_ai"
+msgid "AI"
+msgstr "AI"
+
+msgctxt "model:ir.ui.menu,name:menu_ai_model_cost"
+msgid "Costs"
+msgstr "Költségek"

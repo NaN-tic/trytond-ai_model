@@ -66,6 +66,7 @@ class TestWebSearch(unittest.TestCase):
                 chat=SimpleNamespace(completions=SimpleNamespace(
                         create=lambda **kwargs: (
                             request.update(kwargs) or response))))
+            Transaction().commit()
             result, error = supported_model.get_completion(
                 [{'role': 'user', 'content': 'Search'}], supported_model,
                 client=client)

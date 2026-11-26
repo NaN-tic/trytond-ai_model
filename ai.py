@@ -1,17 +1,19 @@
 import json
 import logging
+import re
 from decimal import Decimal
 
 import requests
 from openai import OpenAI
-from sql import Table
-from sql.operators import Exists
+from sql import Cast, Table
+from sql.operators import Concat, Exists
 from trytond import backend
 import trytond.config as config_
 from trytond.exceptions import UserError
 from trytond.i18n import gettext
 from trytond.model import (
     DeactivableMixin, ModelSingleton, ModelSQL, ModelView, Unique, fields)
+from trytond.model.exceptions import ValidationError
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Bool, Eval
 from trytond.transaction import (
@@ -94,6 +96,17 @@ def migrate_model_data():
                     target_model_data.id,
                     where=(target_model_data.module == 'ai_model')
                     & (target_model_data.fs_id == model_data.fs_id)))))
+
+    if backend.TableHandler.table_exist('ir_ui_view'):
+        view = Table('ir_ui_view')
+        cursor.execute(*view.update(
+                [view.module], ['ai_model'],
+                where=view.id.in_(model_data.select(
+                        model_data.db_id,
+                        where=(model_data.model == 'ir.ui.view')
+                        & (model_data.module == 'ai_model')
+                        & model_data.fs_id.in_(
+                            tuple(sorted(MOVED_MODEL_DATA)))))))
 
 
 def migrate_models():
@@ -744,11 +757,11 @@ class AIModelCost(ModelSQL, ModelView):
     'AI Model Cost'
     __name__ = 'ai.model.cost'
 
-    # Costs are committed independently. The origin may not be committed yet,
-    # so Reference.get can temporarily resolve the stored reference to None.
-    # It can also remain missing if the caller rolls back after the API call.
-    origin = fields.Reference(
-        'Origin', selection='get_origins', readonly=True)
+    origin = fields.Function(
+        fields.Char('Origin'), 'get_origin', searcher='search_origin')
+    origin_reference = fields.Char('Origin Reference', readonly=True)
+    parent_origin = fields.Reference(
+        'Parent Origin', selection='get_models', required=True, readonly=True)
     model = fields.Many2One(
         'ai.model', 'Model', required=True, readonly=True,
         ondelete='RESTRICT')
@@ -761,12 +774,68 @@ class AIModelCost(ModelSQL, ModelView):
     duration = fields.TimeDelta('Duration', required=True, readonly=True)
 
     @classmethod
-    def get_origins(cls):
+    def __register__(cls, module_name):
+        handler = cls.__table_handler__(module_name)
+        if handler.column_exist('fallback_origin'):
+            handler.column_rename('fallback_origin', 'parent_origin')
+        if handler.column_exist('origin'):
+            handler.column_rename('origin', 'origin_reference')
+            handler.add_column('parent_origin', 'VARCHAR')
+            table = cls.__table__()
+            # Old references may already be dangling. The AI model is stored
+            # with a foreign key and provides a parent for these costs.
+            cursor = Transaction().connection.cursor()
+            cursor.execute(*table.update([table.parent_origin], [
+                Concat('ai.model,', Cast(table.model, 'VARCHAR'))]))
+        super().__register__(module_name)
+
+    @classmethod
+    def get_models(cls):
         Model = Pool().get('ir.model')
         return [(None, '')] + [
             (model.name, model.string)
             for model in Model.search([], order=[('string', 'ASC')])
             ]
+
+    @classmethod
+    def validate_fields(cls, records, field_names):
+        super().validate_fields(records, field_names)
+        if field_names and 'origin_reference' not in field_names:
+            return
+        for record in records:
+            if record.origin_reference:
+                cls.check_origin_reference(record.origin_reference)
+
+    @classmethod
+    def check_origin_reference(cls, reference):
+        try:
+            model, id_ = reference.split(',')
+            if not model or model not in dict(cls.get_models()):
+                raise ValueError(f'Model {model!r} is not an allowed cost origin')
+            if int(id_) < 0:
+                raise ValueError(f'Origin ID {id_!r} belongs to an unsaved record')
+            if str(int(id_)) != id_:
+                raise ValueError(f'Origin ID {id_!r} is not a canonical integer')
+        except (AttributeError, ValueError) as error:
+            raise ValidationError(gettext(
+                'ai_model.msg_invalid_cost_origin', origin=reference),
+                str(error)) from error
+
+    @classmethod
+    def get_origin(cls, records, name):
+        ids = [record.id for record in records]
+        values = []
+        for record in records:
+            reference = record.origin_reference
+            # Legacy values may include unsaved or malformed references.
+            if reference and re.fullmatch(r'[^,]+,(0|[1-9][0-9]*)', reference):
+                values.append({'id': record.id, name: reference})
+        origins = cls.parent_origin.get(ids, cls, name, values=values)
+        return {id_: origins.get(id_) for id_ in ids}
+
+    @classmethod
+    def search_origin(cls, name, clause):
+        return [('origin_reference', *clause[1:])]
 
 
 class AIConfiguration(ModelSingleton, ModelSQL, ModelView):
