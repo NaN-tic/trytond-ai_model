@@ -92,6 +92,17 @@ def migrate_model_data():
                     where=(target_model_data.module == 'ai_model')
                     & (target_model_data.fs_id == model_data.fs_id)))))
 
+    if backend.TableHandler.table_exist('ir_ui_view'):
+        view = Table('ir_ui_view')
+        cursor.execute(*view.update(
+                [view.module], ['ai_model'],
+                where=view.id.in_(model_data.select(
+                        model_data.db_id,
+                        where=(model_data.model == 'ir.ui.view')
+                        & (model_data.module == 'ai_model')
+                        & model_data.fs_id.in_(
+                            tuple(sorted(MOVED_MODEL_DATA)))))))
+
 
 def migrate_models():
     cursor = Transaction().connection.cursor()
