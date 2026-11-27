@@ -10,6 +10,8 @@
     <field name="created"/>
     <label name="context_length"/>
     <field name="context_length"/>
+    <label name="max_prompt_tokens"/>
+    <field name="max_prompt_tokens"/>
     <separator name="description" colspan="6"/>
     <field name="description" colspan="6"/>
     <notebook colspan="6">

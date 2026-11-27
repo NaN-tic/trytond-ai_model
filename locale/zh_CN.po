@@ -237,12 +237,12 @@ msgid "Mistral OCR (best for scanned documents)"
 msgstr "Mistral OCR（最适合扫描文档）"
 
 msgctxt "selection:ai.model,llm_pdf_engine:"
-msgid "Native (best for born-digital PDFs)"
-msgstr "原生（最适合原生数字 PDF）"
+msgid "Native (managed by the model)"
+msgstr "原生（由模型处理）"
 
 msgctxt "selection:ai.model,llm_pdf_engine:"
-msgid "PDF Text (balanced)"
-msgstr "PDF 文本（均衡）"
+msgid "PDF Text (converts PDF to markdown)"
+msgstr "PDF 文本（将 PDF 转换为 markdown）"
 
 msgctxt "selection:ai.model,reasoning:"
 msgid "High"

@@ -1,4 +1,5 @@
 import json
+import logging
 import re
 from decimal import Decimal
 
@@ -27,7 +28,9 @@ else:
     OPENAI_CLIENT = None
 
 OPENROUTER_KEY = config_.config.get('openrouter', 'api_key')
-OPENROUTER_MODELS_URL = 'https://openrouter.ai/api/v1/models'
+OPENROUTER_URL = 'https://openrouter.ai'
+OPENROUTER_MODELS_PATH = '/api/v1/models'
+OPENROUTER_MODELS_URL = OPENROUTER_URL + OPENROUTER_MODELS_PATH
 OPENROUTER_REASONING_PARAMETERS = {'reasoning', 'reasoning_effort'}
 OPENROUTER_WEB_SEARCH_PARAMETERS = {'web_search_options'}
 TOKENS_PER_MILLION = Decimal(1000000)
@@ -74,6 +77,8 @@ if OPENROUTER_KEY:
         api_key=OPENROUTER_KEY)
 else:
     OPENROUTER_CLIENT = None
+
+logger = logging.getLogger(__name__)
 
 
 def migrate_model_data():
@@ -283,6 +288,8 @@ class OpenRouterModel(DeactivableMixin, ModelSQL, ModelView):
     description = fields.Text('Description', readonly=True)
     created = fields.Integer('Created', readonly=True)
     context_length = fields.Integer('Context Length', readonly=True)
+    context_limit = fields.Function(
+        fields.Integer('Context Limit'), 'get_context_limit')
     prompt_price = fields.Char('Prompt Price', readonly=True)
     completion_price = fields.Char('Completion Price', readonly=True)
     request_price = fields.Char('Request Price', readonly=True)
@@ -304,6 +311,7 @@ class OpenRouterModel(DeactivableMixin, ModelSQL, ModelView):
         'Top Provider Context Length', readonly=True)
     top_provider_max_completion_tokens = fields.Integer(
         'Top Provider Max Completion Tokens', readonly=True)
+    max_prompt_tokens = fields.Integer('Max Prompt Tokens', readonly=True)
     top_provider_is_moderated = fields.Boolean(
         'Top Provider Is Moderated', readonly=True)
     per_request_limits = fields.Text('Per Request Limits', readonly=True)
@@ -335,6 +343,11 @@ class OpenRouterModel(DeactivableMixin, ModelSQL, ModelView):
 
     def get_rec_name(self, name):
         return '%s (%s)' % (self.name, self.openrouter_id)
+
+    def get_context_limit(self, name):
+        return min(filter(None, (
+                    self.context_length, self.top_provider_context_length)),
+            default=None)
 
     @classmethod
     def search_rec_name(cls, name, clause):
@@ -383,6 +396,36 @@ class OpenRouterModel(DeactivableMixin, ModelSQL, ModelView):
         return payload.get('data', [])
 
     @classmethod
+    def _fetch_openrouter_prompt_limits(cls, models):
+        limits = {}
+        with requests.Session() as session:
+            session.headers.update(cls._openrouter_headers())
+            for model in models:
+                model_id = model.get('id')
+                details = (model.get('links') or {}).get('details') or ''
+                if (not model_id
+                        or not details.startswith(OPENROUTER_MODELS_PATH + '/')):
+                    continue
+                try:
+                    response = session.get(OPENROUTER_URL + details, timeout=10)
+                    response.raise_for_status()
+                    endpoints = response.json()['data']['endpoints']
+                    if not isinstance(endpoints, list):
+                        raise ValueError('Expected a list of endpoints')
+                    reported_limits = (endpoint.get('max_prompt_tokens')
+                        for endpoint in endpoints)
+                    limits[model_id] = min(
+                        (limit for limit in reported_limits
+                            if isinstance(limit, int) and limit > 0),
+                        default=None)
+                except (requests.exceptions.RequestException, AttributeError,
+                        KeyError, TypeError, ValueError) as exception:
+                    logger.warning(
+                        'Could not sync OpenRouter prompt limit for %s: %s',
+                        model_id, exception)
+        return limits
+
+    @classmethod
     def _values_from_payload(cls, data):
         architecture = data.get('architecture') or {}
         pricing = data.get('pricing') or {}
@@ -425,6 +468,7 @@ class OpenRouterModel(DeactivableMixin, ModelSQL, ModelView):
     @classmethod
     def sync_models(cls):
         models = cls._fetch_openrouter_models()
+        prompt_limits = cls._fetch_openrouter_prompt_limits(models)
         existing = {
             model.openrouter_id: model
             for model in cls.search([
@@ -438,8 +482,10 @@ class OpenRouterModel(DeactivableMixin, ModelSQL, ModelView):
             if not model.get('id'):
                 continue
             values = cls._values_from_payload(model)
-            seen.add(values['openrouter_id'])
-            existing_model = existing.get(values['openrouter_id'])
+            openrouter_id = values['openrouter_id']
+            values['max_prompt_tokens'] = prompt_limits.get(openrouter_id)
+            seen.add(openrouter_id)
+            existing_model = existing.get(openrouter_id)
             if existing_model:
                 cls.write([existing_model], values)
             else:
@@ -503,11 +549,13 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
             'invisible': Eval('type') != 'llm',
             }, depends=['type'])
     llm_pdf_engine = fields.Selection([
-            (None, ''),
-            ('mistral-ocr', 'Mistral OCR (best for scanned documents)'),
-            ('native', 'Native (best for born-digital PDFs)'),
-            ('pdf-text', 'PDF Text (balanced)'),
-            ], 'LLM PDF Engine', states={
+            ('native', 'Native (managed by the model)'),
+            ('mistral-ocr',
+                'Mistral OCR (best for scanned documents)'),
+            # OpenRouter has deprecated pdf-text but still accepts it
+            # because it redirects to cloudflare-ai.
+            ('pdf-text', 'PDF Text (converts PDF to markdown)'),
+            ], 'LLM PDF Engine', required=True, sort=False, states={
                 'invisible': (
                     (Eval('type') != 'llm')
                     | (Eval('provider') != 'openrouter')),
@@ -560,6 +608,10 @@ class AIModel(DeactivableMixin, ModelSQL, ModelView):
     @staticmethod
     def default_allow_web_search():
         return 'prohibited'
+
+    @staticmethod
+    def default_llm_pdf_engine():
+        return 'native'
 
     @fields.depends(
         'type', 'provider', 'openrouter_model',
